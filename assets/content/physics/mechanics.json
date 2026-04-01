@@ -1,0 +1,240 @@
+{
+  "id": "subj-phy-001",
+  "name": "Physics",
+  "description": "Understand the laws that govern our universe",
+  "icon_asset": "assets/images/icons/physics.png",
+  "color_index": 1,
+  "order": 1,
+  "module_ids": ["mod-mech-001"],
+  "modules": [
+    {
+      "id": "mod-mech-001",
+      "title": "Mechanics",
+      "description": "Motion, forces, and energy — the foundation of all physics",
+      "order": 0,
+      "chapter_ids": ["ch-motion-001", "ch-forces-001"],
+      "chapters": [
+        {
+          "id": "ch-motion-001",
+          "title": "Motion & Speed",
+          "summary": "Learn how to describe and measure how things move, from speed and velocity to distance-time graphs.",
+          "order": 0,
+          "lesson_ids": ["les-mot-001", "les-mot-002"],
+          "lessons": [
+            {
+              "id": "les-mot-001",
+              "title": "Speed and velocity",
+              "subtitle": "How fast? And in which direction?",
+              "order": 0,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "**Speed** tells you how fast something is moving — but not where it's going. **Velocity** tells you both the speed AND the direction. This difference matters in physics: a car going 60 km/h north and a car going 60 km/h south have the same speed but opposite velocities."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "\\text{Speed} = \\frac{\\text{Distance}}{\\text{Time}} = \\frac{d}{t}",
+                    "label": "Speed formula — measured in m/s or km/h"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      {
+                        "title": "Speed is a scalar",
+                        "body": "It has only magnitude (size). Example: 30 m/s"
+                      },
+                      {
+                        "title": "Velocity is a vector",
+                        "body": "It has both magnitude and direction. Example: 30 m/s heading east"
+                      },
+                      {
+                        "title": "Average vs instantaneous",
+                        "body": "Average speed = total distance ÷ total time. Your speedometer shows instantaneous speed."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A train travels 180 km in 3 hours. What is its average speed?",
+                    "options": ["60 km/h", "45 km/h", "90 km/h", "540 km/h"],
+                    "answer": "60 km/h",
+                    "hint": "Speed = Distance ÷ Time = 180 ÷ 3",
+                    "explanation": "Speed = 180 km ÷ 3 h = 60 km/h"
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "trueFalse",
+                    "question": "Velocity and speed always have the same value.",
+                    "answer": "False",
+                    "hint": "Think about what happens when direction changes.",
+                    "explanation": "They are equal only when moving in a straight line without changing direction. Velocity can be negative; speed cannot."
+                  }
+                }
+              ]
+            },
+            {
+              "id": "les-mot-002",
+              "title": "Acceleration",
+              "subtitle": "Changing speed over time",
+              "order": 1,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "**Acceleration** is the rate at which velocity changes over time. It can mean speeding up, slowing down (deceleration), or changing direction. Even a car turning at constant speed is accelerating — because its direction changes."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "a = \\frac{v - u}{t}",
+                    "label": "a = acceleration (m/s²),  v = final velocity,  u = initial velocity,  t = time"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "number_line",
+                    "config": {
+                      "min": 0,
+                      "max": 100,
+                      "label": "Drag to explore velocity values (m/s)"
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A car goes from 10 m/s to 40 m/s in 6 seconds. What is its acceleration?",
+                    "options": ["5 m/s²", "8 m/s²", "4 m/s²", "30 m/s²"],
+                    "answer": "5 m/s²",
+                    "hint": "a = (v − u) ÷ t = (40 − 10) ÷ 6",
+                    "explanation": "a = (40 − 10) ÷ 6 = 30 ÷ 6 = 5 m/s²"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ch-forces-001",
+          "title": "Forces & Newton's Laws",
+          "summary": "Understand what forces are and how Newton's three laws explain the motion of everything around us.",
+          "order": 1,
+          "lesson_ids": ["les-force-001"],
+          "lessons": [
+            {
+              "id": "les-force-001",
+              "title": "Newton's Laws of Motion",
+              "subtitle": "The rules everything obeys",
+              "order": 0,
+              "estimated_minutes": 8,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "Isaac Newton gave us three laws that describe how forces and motion relate. These laws explain why you stay in your seat on a bus, why rockets launch, and why objects fall to Earth. They work for everything from atoms to galaxies."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      {
+                        "title": "First Law — Inertia",
+                        "body": "An object stays at rest or keeps moving at constant velocity unless a net force acts on it. A book on a table stays put. A ball rolling on frictionless ice keeps rolling forever."
+                      },
+                      {
+                        "title": "Second Law — F = ma",
+                        "body": "The net force on an object equals its mass × acceleration. Bigger force = more acceleration. Heavier object = less acceleration for same force."
+                      },
+                      {
+                        "title": "Third Law — Action-Reaction",
+                        "body": "For every action, there is an equal and opposite reaction. You push down on the floor; the floor pushes up on you with the same force."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "equation",
+                  "data": {
+                    "latex": "F = ma",
+                    "label": "Newton's Second Law: Force (N) = mass (kg) × acceleration (m/s²)"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "force_diagram",
+                    "config": {
+                      "label": "Adjust forces to see Newton's Second Law in action"
+                    }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A 10 kg box is pushed with a net force of 30 N. What is its acceleration?",
+                    "options": ["3 m/s²", "300 m/s²", "0.3 m/s²", "20 m/s²"],
+                    "answer": "3 m/s²",
+                    "hint": "F = ma → a = F ÷ m = 30 ÷ 10",
+                    "explanation": "a = F ÷ m = 30 ÷ 10 = 3 m/s²"
+                  }
+                },
+                {
+                  "id": "b6",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "pendulum",
+                    "config": {
+                      "label": "A pendulum — gravity + inertia in action"
+                    }
+                  }
+                },
+                {
+                  "id": "b7",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "trueFalse",
+                    "question": "According to Newton's First Law, a moving object will eventually stop even without any friction.",
+                    "answer": "False",
+                    "hint": "What does Newton's First Law say about objects in motion?",
+                    "explanation": "Without any force (including friction), a moving object keeps moving forever at constant velocity. It's friction that stops things in real life."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

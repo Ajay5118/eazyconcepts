@@ -1,0 +1,1633 @@
+{
+  "id": "subj-geo3d-001",
+  "name": "3D Geometry",
+  "description": "Explore shapes, surfaces, volumes and transformations in three dimensions",
+  "icon_asset": "assets/images/icons/math.png",
+  "color_index": 0,
+  "order": 1,
+  "module_ids": ["mod-geo3d-found", "mod-geo3d-surface", "mod-geo3d-volume", "mod-geo3d-adv"],
+  "modules": [
+
+    {
+      "id": "mod-geo3d-found",
+      "title": "Foundations of 3D Space",
+      "description": "Build intuition for 3D shapes: vertices, edges, faces and the coordinate system",
+      "order": 0,
+      "chapter_ids": ["ch-geo3d-intro", "ch-geo3d-prisms", "ch-geo3d-pyrcone"],
+      "chapters": [
+
+        {
+          "id": "ch-geo3d-intro",
+          "title": "Introduction to 3D Shapes",
+          "summary": "Understand how 3D shapes differ from 2D, identify vertices, edges and faces, and explore the 3D coordinate system.",
+          "order": 0,
+          "lesson_ids": ["les-3d-001", "les-3d-002", "les-3d-003"],
+          "lessons": [
+
+            {
+              "id": "les-3d-001",
+              "title": "From 2D to 3D",
+              "subtitle": "Adding the third dimension",
+              "order": 0,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "In 2D geometry we work with flat shapes — squares, circles, triangles. **3D geometry** adds a third dimension: depth. Instead of area, we now talk about **volume**. Instead of perimeter, we measure **surface area**. Every solid object around you — a box, a ball, a tin can — is a 3D shape."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "1D: A line", "body": "One dimension — only length. Like a wire stretched straight." },
+                      { "title": "2D: A flat shape", "body": "Two dimensions — length and width. Like a drawing on paper. Has area." },
+                      { "title": "3D: A solid", "body": "Three dimensions — length, width and height (depth). Like real objects. Has volume and surface area." }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "cube", "label": "A cube — drag to rotate and see all six faces" }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A football is an example of which type of shape?",
+                    "options": ["1D", "2D", "3D", "4D"],
+                    "answer": "3D",
+                    "hint": "You can hold a football — it has depth.",
+                    "explanation": "A football occupies space in three dimensions, so it is a 3D shape (a sphere)."
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "trueFalse",
+                    "question": "A square and a cube are both 2D shapes.",
+                    "answer": "False",
+                    "hint": "A square is flat; a cube has depth.",
+                    "explanation": "A square is 2D (flat). A cube is its 3D counterpart — it has length, width AND height."
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-002",
+              "title": "Vertices, Edges & Faces",
+              "subtitle": "The anatomy of a 3D solid",
+              "order": 1,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "Every 3D solid is made of three basic parts:\n- **Vertex** (plural: vertices) — a corner point where edges meet\n- **Edge** — a straight line where two faces meet\n- **Face** — a flat surface of the solid\n\nCounting these carefully reveals deep patterns, including Euler's famous formula."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "cube", "label": "Cube: 8 vertices, 12 edges, 6 faces — drag to explore" }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "drag_sort",
+                    "config": {
+                      "label": "Order by number of faces (fewest first)",
+                      "items": ["Tetrahedron (4 faces)", "Cube (6 faces)", "Octahedron (8 faces)", "Dodecahedron (12 faces)"]
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "drag_sort",
+                    "config": {
+                      "label": "Order by number of faces (fewest first)",
+                      "items": ["Tetrahedron (4 faces)", "Cube (6 faces)", "Octahedron (8 faces)", "Dodecahedron (12 faces)"]
+                    }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "A cube has 8 vertices and 12 edges. How many faces does it have?",
+                    "answer": "6",
+                    "hint": "Use Euler's formula: V − E + F = 2",
+                    "explanation": "8 − 12 + F = 2 → F = 2 − 8 + 12 = 6"
+                  }
+                },
+                {
+                  "id": "b6",
+                  "type": "equation",
+                  "data": {
+                    "latex": "V - E + F = 2",
+                    "label": "Euler's formula — holds for all convex polyhedra"
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-003",
+              "title": "The 3D Coordinate System",
+              "subtitle": "Locating points in space with (x, y, z)",
+              "order": 2,
+              "estimated_minutes": 7,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "In 2D we locate points with (x, y). In 3D we need a **third axis**, z, which points toward or away from us. Every point in 3D space has coordinates **(x, y, z)**. The three axes are mutually perpendicular and meet at the **origin** (0, 0, 0)."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "x-axis", "body": "Points left–right. Positive x is to the right." },
+                      { "title": "y-axis", "body": "Points up–down. Positive y is upward." },
+                      { "title": "z-axis", "body": "Points forward–backward (depth). Positive z comes toward you." },
+                      { "title": "Reading a 3D coordinate", "body": "Point (3, 2, 5) is 3 units right, 2 units up, 5 units forward from the origin." }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "equation",
+                  "data": {
+                    "latex": "d = \\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2 + (z_2-z_1)^2}",
+                    "label": "Distance between two points in 3D space"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "tetrahedron", "label": "Drag to see how each vertex has a unique (x,y,z) position" }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "What is the distance from the origin (0,0,0) to point (3, 4, 0)?",
+                    "options": ["5", "7", "12", "25"],
+                    "answer": "5",
+                    "hint": "Use √(3² + 4² + 0²)",
+                    "explanation": "√(9 + 16 + 0) = √25 = 5. This is the 3-4-5 right triangle in the xy-plane."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "ch-geo3d-prisms",
+          "title": "Prisms & Cylinders",
+          "summary": "Discover how prisms and cylinders are formed by extending a 2D shape along a straight path.",
+          "order": 1,
+          "lesson_ids": ["les-3d-004", "les-3d-005", "les-3d-006"],
+          "lessons": [
+
+            {
+              "id": "les-3d-004",
+              "title": "What is a Prism?",
+              "subtitle": "Stacking identical cross-sections",
+              "order": 0,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A **prism** is a solid with two identical, parallel faces called **bases**, connected by flat rectangular faces called **lateral faces**. The bases can be any polygon — triangle, square, hexagon, etc. The shape of the base names the prism."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "prism", "label": "Triangular prism — two triangular bases, three rectangular sides" }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "Triangular prism", "body": "Bases are triangles. 5 faces, 9 edges, 6 vertices." },
+                      { "title": "Rectangular prism (cuboid)", "body": "Bases are rectangles. 6 faces, 12 edges, 8 vertices." },
+                      { "title": "Hexagonal prism", "body": "Bases are hexagons. 8 faces, 18 edges, 12 vertices." }
+                    ]
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A pentagonal prism has how many faces?",
+                    "options": ["5", "7", "10", "12"],
+                    "answer": "7",
+                    "hint": "2 pentagon bases + 5 rectangular lateral faces",
+                    "explanation": "2 pentagonal bases + 5 rectangular lateral faces = 7 faces total."
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-005",
+              "title": "Nets of Prisms",
+              "subtitle": "Unfolding a solid into a flat shape",
+              "order": 1,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A **net** is what you get when you unfold a 3D solid so all its faces lie flat in a single plane. Nets are crucial for understanding surface area — the total area of all faces equals the area of the net. A cube has 11 different valid nets!"
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "net_folder",
+                    "config": { "shape": "cube", "label": "Watch the net fold into a cube" }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "trueFalse",
+                    "question": "The area of a net equals the surface area of the 3D solid.",
+                    "answer": "True",
+                    "hint": "The net contains exactly all the faces.",
+                    "explanation": "When you unfold a solid into a net, no faces are added or removed, so the areas are equal."
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A cube has how many different valid nets?",
+                    "options": ["6", "8", "11", "24"],
+                    "answer": "11",
+                    "hint": "This is a famous combinatorics result.",
+                    "explanation": "A cube has exactly 11 distinct nets — each a different arrangement of 6 squares that folds into a cube."
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-006",
+              "title": "Cylinders",
+              "subtitle": "A prism with circular bases",
+              "order": 2,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A **cylinder** is like a prism but with circular bases. It has two circular faces (top and bottom) and one curved lateral surface. If you unroll the lateral surface, it forms a rectangle with width = circumference of the circle."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "cross_section_explorer",
+                    "config": { "shape": "cylinder", "label": "Every horizontal cut through a cylinder is a circle" }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "equation",
+                  "data": {
+                    "latex": "\\text{Lateral surface} = 2\\pi r h",
+                    "label": "Width = circumference (2πr), height = h"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "trueFalse",
+                    "question": "Every cross-section of a cylinder parallel to its base is a circle.",
+                    "answer": "True",
+                    "hint": "Think about slicing a can of beans horizontally.",
+                    "explanation": "Because the bases are circles and the sides are straight, any horizontal cut produces a circle of the same radius."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "ch-geo3d-pyrcone",
+          "title": "Pyramids, Cones & Spheres",
+          "summary": "Meet the pointed and curved solids — pyramids, cones and spheres.",
+          "order": 2,
+          "lesson_ids": ["les-3d-007", "les-3d-008", "les-3d-009"],
+          "lessons": [
+
+            {
+              "id": "les-3d-007",
+              "title": "Pyramids",
+              "subtitle": "A base that tapers to a single apex",
+              "order": 0,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A **pyramid** has a polygon base and triangular faces that meet at a single point called the **apex**. Like prisms, the base shape names the pyramid. The Great Pyramid of Giza is a square pyramid."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "pyramid", "label": "Square pyramid — drag to see all 5 faces" }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "Square pyramid", "body": "1 square base + 4 triangular faces = 5 faces. V=5, E=8, F=5." },
+                      { "title": "Triangular pyramid (tetrahedron)", "body": "All 4 faces are triangles. V=4, E=6, F=4. The simplest polyhedron." },
+                      { "title": "Slant height vs height", "body": "The height h is the perpendicular distance from apex to base. Slant height l is the height of a triangular face." }
+                    ]
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "tetrahedron", "label": "Tetrahedron — every face is an equilateral triangle" }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "A triangular pyramid (tetrahedron) has 4 vertices and 4 faces. How many edges does it have?",
+                    "answer": "6",
+                    "hint": "V − E + F = 2",
+                    "explanation": "4 − E + 4 = 2 → E = 6"
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-008",
+              "title": "Cones",
+              "subtitle": "A circular base tapering to an apex",
+              "order": 1,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A **cone** is like a pyramid but with a circular base. It has one circular face and one curved lateral surface that tapers to a point (apex). Ice cream cones and traffic cones are real-world examples. The **slant height** l is the distance from apex to any point on the base edge."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "cross_section_explorer",
+                    "config": { "shape": "cone", "label": "Slice a cone at different heights" }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "equation",
+                  "data": {
+                    "latex": "l = \\sqrt{r^2 + h^2}",
+                    "label": "Slant height l from radius r and perpendicular height h"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A cone with radius 3 and height 4 has slant height:",
+                    "options": ["3", "4", "5", "7"],
+                    "answer": "5",
+                    "hint": "Pythagoras: √(3² + 4²)",
+                    "explanation": "l = √(9 + 16) = √25 = 5"
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-009",
+              "title": "Spheres",
+              "subtitle": "Perfectly round in every direction",
+              "order": 2,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A **sphere** is the set of all points in 3D space that are exactly **r** units from a central point. Every cross-section through the centre is called a **great circle**. A sphere has no flat faces, no edges and no vertices — it is perfectly smooth."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "cross_section_explorer",
+                    "config": { "shape": "sphere", "label": "Cutting a sphere at different heights" }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "trueFalse",
+                    "question": "All cross-sections of a sphere are circles.",
+                    "answer": "True",
+                    "hint": "Any plane that cuts a sphere creates a circular boundary.",
+                    "explanation": "True — any planar cross-section of a sphere is a circle. The largest is the great circle through the centre."
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "Which cross-section of a sphere is the largest?",
+                    "options": ["Any cross-section", "One near the top", "The great circle through the centre", "One near the equator but not at the centre"],
+                    "answer": "The great circle through the centre",
+                    "hint": "The closer to the centre, the larger the cross-section.",
+                    "explanation": "The cross-section through the centre has the full radius r, giving maximum area πr²."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "mod-geo3d-surface",
+      "title": "Surface Area",
+      "description": "Calculate how much material covers the outside of any 3D solid",
+      "order": 1,
+      "chapter_ids": ["ch-geo3d-saprism", "ch-geo3d-sacurved"],
+      "chapters": [
+
+        {
+          "id": "ch-geo3d-saprism",
+          "title": "Surface Area of Prisms & Pyramids",
+          "summary": "Use nets and formulas to find the total surface area of prisms and pyramids.",
+          "order": 0,
+          "lesson_ids": ["les-3d-010", "les-3d-011", "les-3d-012"],
+          "lessons": [
+
+            {
+              "id": "les-3d-010",
+              "title": "Surface Area of a Cuboid",
+              "subtitle": "Adding up all six rectangular faces",
+              "order": 0,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "The **surface area** of a solid is the total area of all its outer faces. For a cuboid with length l, width w and height h, there are three pairs of identical rectangular faces."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "SA_{cuboid} = 2(lw + lh + wh)",
+                    "label": "Surface area of a cuboid"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "net_folder",
+                    "config": { "shape": "cube", "label": "Unfold to see the six faces of a cuboid" }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "value_table",
+                    "config": {
+                      "label": "SA of a cube: 6s² — adjust side length",
+                      "function_type": "quadratic",
+                      "param_label": "Side s",
+                      "param_min": 1,
+                      "param_max": 6,
+                      "rows": 5
+                    }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "A cuboid is 4 cm × 3 cm × 2 cm. What is its surface area in cm²?",
+                    "answer": "52",
+                    "hint": "2(4×3 + 4×2 + 3×2) = 2(12 + 8 + 6)",
+                    "explanation": "2(12 + 8 + 6) = 2 × 26 = 52 cm²"
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-011",
+              "title": "Surface Area of a Triangular Prism",
+              "subtitle": "Two triangles and three rectangles",
+              "order": 1,
+              "estimated_minutes": 7,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A triangular prism has **2 triangular bases** and **3 rectangular lateral faces**. The surface area is the sum of all five faces. The key is finding the area of the triangular base first."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "SA = 2 \\times \\tfrac{1}{2}bh_{\\triangle} + (a+b+c) \\times L",
+                    "label": "2 triangular bases + 3 rectangles (a,b,c = triangle sides, L = prism length)"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "Step 1: Area of both bases", "body": "2 × (½ × base × height_of_triangle)" },
+                      { "title": "Step 2: Area of three rectangles", "body": "Each rectangle = one side of the triangle × length of prism. Add all three." },
+                      { "title": "Step 3: Add them up", "body": "SA = 2 × base area + lateral area" }
+                    ]
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "prism", "label": "Identify all 5 faces of this triangular prism" }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A triangular prism has equilateral triangular bases (side 4 cm, height 3.46 cm) and length 10 cm. What is the lateral surface area?",
+                    "options": ["40 cm²", "80 cm²", "120 cm²", "138.4 cm²"],
+                    "answer": "120 cm²",
+                    "hint": "3 rectangles: 3 × (4 × 10)",
+                    "explanation": "3 rectangles each of area 4 × 10 = 40 cm². Total lateral area = 120 cm²."
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-012",
+              "title": "Surface Area of a Pyramid",
+              "subtitle": "Base plus slant triangular faces",
+              "order": 2,
+              "estimated_minutes": 7,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "For a pyramid, surface area = **base area** + **total lateral area** (the triangular faces). For a square pyramid, each lateral face is an identical isoceles triangle. The height of these triangles is the **slant height** l, not the pyramid's vertical height h."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "SA_{sq.pyramid} = s^2 + 4 \\times \\tfrac{1}{2}sl = s^2 + 2sl",
+                    "label": "s = base side, l = slant height"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "pyramid", "label": "Square pyramid — see the 4 triangular lateral faces" }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "A square pyramid has base side 6 cm and slant height 5 cm. Find the total surface area in cm².",
+                    "answer": "96",
+                    "hint": "Base area = 36. Lateral area = 4 × ½ × 6 × 5 = 60. Total?",
+                    "explanation": "SA = 6² + 2 × 6 × 5 = 36 + 60 = 96 cm²"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "ch-geo3d-sacurved",
+          "title": "Surface Area of Curved Solids",
+          "summary": "Apply π to find the surface area of cylinders, cones and spheres.",
+          "order": 1,
+          "lesson_ids": ["les-3d-013", "les-3d-014", "les-3d-015"],
+          "lessons": [
+
+            {
+              "id": "les-3d-013",
+              "title": "Surface Area of a Cylinder",
+              "subtitle": "Two circles and a rolled rectangle",
+              "order": 0,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "Unroll a cylinder: you get **two circles** (top and bottom) and one **rectangle** (the curved side laid flat). The rectangle's width equals the circumference of the circle (2πr). This gives us the surface area formula."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "SA_{cylinder} = 2\\pi r^2 + 2\\pi rh",
+                    "label": "2 circular bases + curved lateral surface"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "value_table",
+                    "config": {
+                      "label": "Lateral area 2πrh: fix r=3, vary h",
+                      "function_type": "linear",
+                      "param_label": "h (cm)",
+                      "param_min": 1,
+                      "param_max": 10,
+                      "rows": 6
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A cylinder has radius 7 cm and height 10 cm. What is the total surface area? (Use π ≈ 22/7)",
+                    "options": ["748 cm²", "440 cm²", "1540 cm²", "308 cm²"],
+                    "answer": "748 cm²",
+                    "hint": "SA = 2π(7)² + 2π(7)(10)",
+                    "explanation": "2π(49) + 2π(70) = 2π × 119 = 2 × 22/7 × 119 = 748 cm²"
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-014",
+              "title": "Surface Area of a Cone",
+              "subtitle": "A circle base and a curved fan",
+              "order": 1,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "Unroll a cone's lateral surface: it becomes a **sector** (fan-shape) of a circle. The radius of that sector equals the **slant height** l of the cone. The arc length of the sector equals the circumference of the cone's base (2πr)."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "SA_{cone} = \\pi r^2 + \\pi r l",
+                    "label": "Base circle area + lateral sector area"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "Find slant height l", "body": "If r and h are given: l = √(r² + h²)" },
+                      { "title": "Base area", "body": "πr²" },
+                      { "title": "Lateral area", "body": "πrl — the area of the unrolled sector" },
+                      { "title": "Total SA", "body": "πr² + πrl = πr(r + l)" }
+                    ]
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "A cone has radius 3 cm and slant height 5 cm. Find the total surface area in cm² (leave in terms of π).",
+                    "answer": "24π",
+                    "hint": "SA = πr(r+l) = π×3×(3+5)",
+                    "explanation": "SA = π × 3 × (3 + 5) = 24π cm²"
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-015",
+              "title": "Surface Area of a Sphere",
+              "subtitle": "Archimedes' beautiful result",
+              "order": 2,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "Archimedes discovered that the surface area of a sphere equals exactly **four times** the area of its great circle. This is a stunning result: SA = 4πr². Archimedes was so proud of this that he asked for a sphere inscribed in a cylinder to be engraved on his tombstone."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "SA_{sphere} = 4\\pi r^2",
+                    "label": "Surface area of a sphere with radius r"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "value_table",
+                    "config": {
+                      "label": "SA = 4πr² — explore how SA grows with r",
+                      "function_type": "quadratic",
+                      "param_label": "Scale",
+                      "param_min": 1,
+                      "param_max": 4,
+                      "rows": 5
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "If a sphere's radius doubles, its surface area becomes:",
+                    "options": ["Twice as large", "3 times as large", "4 times as large", "8 times as large"],
+                    "answer": "4 times as large",
+                    "hint": "SA ∝ r². If r → 2r, then SA → 4r².",
+                    "explanation": "SA = 4πr². New SA = 4π(2r)² = 16πr² = 4 × original SA."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "mod-geo3d-volume",
+      "title": "Volume",
+      "description": "Master volume formulas for every major 3D solid",
+      "order": 2,
+      "chapter_ids": ["ch-geo3d-volprism", "ch-geo3d-volpyr"],
+      "chapters": [
+
+        {
+          "id": "ch-geo3d-volprism",
+          "title": "Volume of Prisms & Cylinders",
+          "summary": "Volume = base area × height. Applies to all prisms and cylinders.",
+          "order": 0,
+          "lesson_ids": ["les-3d-016", "les-3d-017", "les-3d-018"],
+          "lessons": [
+
+            {
+              "id": "les-3d-016",
+              "title": "Understanding Volume",
+              "subtitle": "Counting unit cubes",
+              "order": 0,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "**Volume** measures how much 3D space a solid occupies. We measure it in **cubic units** (cm³, m³, etc.). The simplest way to understand volume: count how many 1×1×1 unit cubes fill the solid. For a 3×3×3 cube, that's 27 unit cubes."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "volume_stacker",
+                    "config": {
+                      "label": "Stack layers of unit cubes — Volume = l × w × h",
+                      "max_layers": 5,
+                      "base": 3
+                    }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "equation",
+                  "data": {
+                    "latex": "V_{cuboid} = l \\times w \\times h",
+                    "label": "Volume of a cuboid"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "A cuboid is 5 cm × 4 cm × 3 cm. What is its volume in cm³?",
+                    "answer": "60",
+                    "hint": "Multiply all three dimensions.",
+                    "explanation": "V = 5 × 4 × 3 = 60 cm³"
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-017",
+              "title": "Volume of Any Prism",
+              "subtitle": "Base area × height",
+              "order": 1,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "The universal rule for all prisms: **Volume = Base Area × Height**. This works because a prism is just a base shape stacked to height h. The shape of the base doesn't matter — just find its area and multiply by the height."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "V_{prism} = A_{base} \\times h",
+                    "label": "Applies to triangular, hexagonal, any prism"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "value_table",
+                    "config": {
+                      "label": "Triangular prism volume: base area × h (base area = 10 cm²)",
+                      "function_type": "linear",
+                      "param_label": "Height h",
+                      "param_min": 1,
+                      "param_max": 10,
+                      "rows": 6
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "A triangular prism has a right-triangle base with legs 6 cm and 8 cm, and the prism is 12 cm long. What is its volume in cm³?",
+                    "answer": "288",
+                    "hint": "Base area = ½ × 6 × 8 = 24. Volume = 24 × 12.",
+                    "explanation": "Base area = ½ × 6 × 8 = 24 cm². V = 24 × 12 = 288 cm³."
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-018",
+              "title": "Volume of a Cylinder",
+              "subtitle": "πr²h — a circle stacked to height h",
+              "order": 2,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A cylinder is just a circle (base area = πr²) stacked to height h. So Volume = πr²h. This is the same rule as for prisms — base area × height."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "V_{cylinder} = \\pi r^2 h",
+                    "label": "Volume of a cylinder with radius r and height h"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "function_plotter",
+                    "config": {
+                      "label": "V = π × r² × h — vary r to see volume grow",
+                      "function_type": "quadratic",
+                      "params": [
+                        { "key": "a", "label": "π·h (≈3.14×h)", "min": 1, "max": 20, "default": 6.28 }
+                      ],
+                      "x_min": 0,
+                      "x_max": 5
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A cylinder has radius 3 cm and height 7 cm. Volume = ? (π ≈ 22/7)",
+                    "options": ["66 cm³", "198 cm³", "154 cm³", "462 cm³"],
+                    "answer": "198 cm³",
+                    "hint": "V = π × 9 × 7 = 63π",
+                    "explanation": "V = 22/7 × 9 × 7 = 22 × 9 = 198 cm³"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "ch-geo3d-volpyr",
+          "title": "Volume of Pyramids, Cones & Spheres",
+          "summary": "Why pyramids and cones hold exactly ⅓ as much as their prism/cylinder counterparts.",
+          "order": 1,
+          "lesson_ids": ["les-3d-019", "les-3d-020", "les-3d-021"],
+          "lessons": [
+
+            {
+              "id": "les-3d-019",
+              "title": "Volume of a Pyramid",
+              "subtitle": "One-third of the prism",
+              "order": 0,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A remarkable fact: you can fit exactly **three identical pyramids** inside a prism of the same base and height. So the volume of a pyramid is exactly **⅓ × base area × height**. This was first proved by Cavalieri's principle."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "V_{pyramid} = \\frac{1}{3} A_{base} \\times h",
+                    "label": "⅓ of the enclosing prism"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "pyramid", "label": "Square pyramid — volume is ⅓ of a square prism of same base and height" }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "A square pyramid has base 6 cm × 6 cm and height 9 cm. Volume = ? cm³",
+                    "answer": "108",
+                    "hint": "V = ⅓ × 36 × 9",
+                    "explanation": "V = ⅓ × 6² × 9 = ⅓ × 36 × 9 = 108 cm³"
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-020",
+              "title": "Volume of a Cone",
+              "subtitle": "One-third of the cylinder",
+              "order": 1,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "Just like pyramids, a cone holds exactly **⅓** the volume of a cylinder with the same base and height. So: V = ⅓πr²h. Next time you fill an ice cream cone from a cylindrical tub, remember: three ice cream cones fill the tub!"
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "V_{cone} = \\frac{1}{3}\\pi r^2 h",
+                    "label": "Volume of a cone"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "value_table",
+                    "config": {
+                      "label": "Cone volume ⅓πr²h (fix r=3): see effect of h",
+                      "function_type": "linear",
+                      "param_label": "Height h",
+                      "param_min": 1,
+                      "param_max": 9,
+                      "rows": 5
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A cone and a cylinder share the same base and height. The cone's volume is:",
+                    "options": ["Half the cylinder", "One-third the cylinder", "Two-thirds the cylinder", "Equal to the cylinder"],
+                    "answer": "One-third the cylinder",
+                    "hint": "This is the fundamental ⅓ relationship.",
+                    "explanation": "V_cone = ⅓πr²h = ⅓ × V_cylinder. Always one-third."
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-021",
+              "title": "Volume of a Sphere",
+              "subtitle": "Four-thirds π r³",
+              "order": 2,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "Archimedes also proved that a sphere fits inside a cylinder (radius r, height 2r) and occupies exactly **⅔** of that cylinder's volume. This gives us V = (4/3)πr³. Notice that volume grows with r **cubed** — small increases in radius give large increases in volume."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "V_{sphere} = \\frac{4}{3}\\pi r^3",
+                    "label": "Volume of a sphere — grows as r cubed"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "function_plotter",
+                    "config": {
+                      "label": "V = (4/3)π·r³ — how fast does sphere volume grow?",
+                      "function_type": "cubic",
+                      "params": [
+                        { "key": "a", "label": "(4/3)π ≈ 4.19", "min": 3.0, "max": 5.0, "default": 4.19 },
+                        { "key": "b", "label": "b (keep 0)", "min": 0, "max": 0, "default": 0 },
+                        { "key": "c", "label": "c (keep 0)", "min": 0, "max": 0, "default": 0 }
+                      ],
+                      "x_min": 0,
+                      "x_max": 4
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A sphere has radius 3 cm. Volume = ? (π ≈ 22/7)",
+                    "options": ["36π cm³", "12π cm³", "108π cm³", "4π cm³"],
+                    "answer": "36π cm³",
+                    "hint": "V = (4/3) × π × 3³ = (4/3) × 27 × π",
+                    "explanation": "(4/3) × π × 27 = 36π cm³"
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "If the radius of a sphere doubles, its volume becomes:",
+                    "options": ["2 times larger", "4 times larger", "6 times larger", "8 times larger"],
+                    "answer": "8 times larger",
+                    "hint": "V ∝ r³. Double r → (2r)³ = 8r³.",
+                    "explanation": "V = (4/3)πr³. New V = (4/3)π(2r)³ = 8 × original volume."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "mod-geo3d-adv",
+      "title": "Advanced 3D Geometry",
+      "description": "Euler's formula, Platonic solids, cross-sections, projections and 3D transformations",
+      "order": 3,
+      "chapter_ids": ["ch-geo3d-euler", "ch-geo3d-cross", "ch-geo3d-transform"],
+      "chapters": [
+
+        {
+          "id": "ch-geo3d-euler",
+          "title": "Polyhedra & Euler's Formula",
+          "summary": "Discover the deep relationship V − E + F = 2 and meet the five Platonic solids.",
+          "order": 0,
+          "lesson_ids": ["les-3d-022", "les-3d-023"],
+          "lessons": [
+
+            {
+              "id": "les-3d-022",
+              "title": "Euler's Polyhedron Formula",
+              "subtitle": "V − E + F = 2 for every convex solid",
+              "order": 0,
+              "estimated_minutes": 8,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "One of the most surprising results in geometry: for **any convex polyhedron**, if you count Vertices (V), Edges (E) and Faces (F), you always get V − E + F = **2**. This is called **Euler's formula** (1752). It doesn't matter how complex the solid — the formula always holds."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "V - E + F = 2",
+                    "label": "Euler's Polyhedron Formula — a topological invariant"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "cube", "label": "Cube: 8 − 12 + 6 = 2 ✓ Drag to verify faces/edges/vertices" }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "drag_sort",
+                    "config": {
+                      "label": "Order shapes by number of vertices (fewest first)",
+                      "items": ["Tetrahedron (V=4)", "Square Pyramid (V=5)", "Triangular Prism (V=6)", "Cube (V=8)"]
+                    }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "drag_sort",
+                    "config": {
+                      "label": "Order shapes by number of vertices (fewest first)",
+                      "items": ["Tetrahedron (V=4)", "Square Pyramid (V=5)", "Triangular Prism (V=6)", "Cube (V=8)"]
+                    }
+                  }
+                },
+                {
+                  "id": "b6",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "A polyhedron has 20 vertices and 30 edges. Using Euler's formula, how many faces does it have?",
+                    "answer": "12",
+                    "hint": "20 − 30 + F = 2",
+                    "explanation": "20 − 30 + F = 2 → F = 2 − 20 + 30 = 12. This is the dodecahedron!"
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-023",
+              "title": "The Five Platonic Solids",
+              "subtitle": "The only perfectly regular polyhedra",
+              "order": 1,
+              "estimated_minutes": 8,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A **Platonic solid** is a polyhedron where every face is the same regular polygon and every vertex has the same number of faces meeting at it. Remarkably, there are **exactly five** such solids — proved by Euclid in 300 BCE. The ancient Greeks associated them with the four elements plus the cosmos."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "Tetrahedron", "body": "4 equilateral triangle faces, 4 vertices, 6 edges. Associated with Fire." },
+                      { "title": "Cube (Hexahedron)", "body": "6 square faces, 8 vertices, 12 edges. Associated with Earth." },
+                      { "title": "Octahedron", "body": "8 equilateral triangle faces, 6 vertices, 12 edges. Associated with Air." },
+                      { "title": "Dodecahedron", "body": "12 regular pentagon faces, 20 vertices, 30 edges. Associated with the Cosmos." },
+                      { "title": "Icosahedron", "body": "20 equilateral triangle faces, 12 vertices, 30 edges. Associated with Water." }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "tetrahedron", "label": "Tetrahedron — the simplest Platonic solid" }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "How many Platonic solids exist?",
+                    "options": ["3", "4", "5", "6"],
+                    "answer": "5",
+                    "hint": "Euclid proved this is exact — not 4, not 6.",
+                    "explanation": "Exactly 5 Platonic solids exist: tetrahedron, cube, octahedron, dodecahedron, icosahedron."
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "trueFalse",
+                    "question": "All Platonic solids satisfy Euler's formula V − E + F = 2.",
+                    "answer": "True",
+                    "hint": "Euler's formula holds for ALL convex polyhedra.",
+                    "explanation": "Yes — every Platonic solid is a convex polyhedron, so V − E + F = 2 for each."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "ch-geo3d-cross",
+          "title": "Cross-Sections & Projections",
+          "summary": "What 2D shapes appear when you slice or project 3D solids?",
+          "order": 1,
+          "lesson_ids": ["les-3d-024", "les-3d-025"],
+          "lessons": [
+
+            {
+              "id": "les-3d-024",
+              "title": "Cross-Sections of Solids",
+              "subtitle": "What shape appears when you slice a solid?",
+              "order": 0,
+              "estimated_minutes": 7,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A **cross-section** is the 2D shape you see when you cut a 3D solid with a flat plane. The shape changes depending on the solid and the angle of the cut. Cross-sections are essential in architecture, engineering and medical imaging (MRI scans are cross-sections of the body)."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "cross_section_explorer",
+                    "config": { "shape": "cone", "label": "Slice a cone horizontally at different heights" }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "Cutting a cube horizontally", "body": "Produces a square at every height." },
+                      { "title": "Cutting a cylinder horizontally", "body": "Always produces a circle of the same radius." },
+                      { "title": "Cutting a cone horizontally", "body": "Circle near the base, shrinking circle toward the apex — this gives Conic Sections." },
+                      { "title": "Cutting a cone at an angle", "body": "Can produce ellipses, parabolas, or hyperbolas — the famous Conic Sections of Apollonius." }
+                    ]
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "cross_section_explorer",
+                    "config": { "shape": "pyramid", "label": "Horizontal cuts through a square pyramid" }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "What cross-section does a horizontal cut through a sphere produce?",
+                    "options": ["Square", "Circle", "Ellipse", "Triangle"],
+                    "answer": "Circle",
+                    "hint": "Every point on a sphere is the same distance from its centre.",
+                    "explanation": "Any horizontal (or any flat) cross-section of a sphere is a circle."
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-025",
+              "title": "Conic Sections",
+              "subtitle": "Ellipses, parabolas and hyperbolas from a cone",
+              "order": 1,
+              "estimated_minutes": 8,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "When you slice a **double cone** at different angles, you get four classic curves: circle, ellipse, parabola and hyperbola — collectively called **Conic Sections**. They appear throughout nature and technology: planets orbit in ellipses, satellite dishes are parabolas, atomic particle paths are hyperbolas."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "Circle", "body": "Cut perpendicular to the axis. All points equidistant from centre. x² + y² = r²" },
+                      { "title": "Ellipse", "body": "Cut at a slight angle. Two foci. x²/a² + y²/b² = 1. Planets orbit in ellipses (Kepler)." },
+                      { "title": "Parabola", "body": "Cut parallel to one slant edge. y = ax². All satellite dishes use this shape." },
+                      { "title": "Hyperbola", "body": "Cut through both cones. Two branches. x²/a² − y²/b² = 1. Used in GPS and navigation." }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "function_plotter",
+                    "config": {
+                      "label": "Parabola y = ax² — adjust a to see curvature change",
+                      "function_type": "quadratic",
+                      "params": [
+                        { "key": "a", "label": "Coefficient a", "min": -3, "max": 3, "default": 1 },
+                        { "key": "b", "label": "b (shift)", "min": -2, "max": 2, "default": 0 }
+                      ],
+                      "x_min": -4,
+                      "x_max": 4
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "Planets orbit the Sun in which type of conic section?",
+                    "options": ["Circle", "Ellipse", "Parabola", "Hyperbola"],
+                    "answer": "Ellipse",
+                    "hint": "Kepler's First Law states this.",
+                    "explanation": "By Kepler's First Law (1609), every planet orbits the Sun in an ellipse with the Sun at one focus."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "ch-geo3d-transform",
+          "title": "3D Transformations & Composite Solids",
+          "summary": "Reflect, rotate and combine 3D shapes to solve complex real-world problems.",
+          "order": 2,
+          "lesson_ids": ["les-3d-026", "les-3d-027"],
+          "lessons": [
+
+            {
+              "id": "les-3d-026",
+              "title": "Reflections & Rotations in 3D",
+              "subtitle": "Symmetry in three dimensions",
+              "order": 0,
+              "estimated_minutes": 7,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "In 3D, symmetry is more complex than in 2D. A 3D shape can have **planes of symmetry** (like a mirror) and **axes of rotation** (spin around a line). A sphere has infinite planes of symmetry. A cube has 9 planes of symmetry and 13 axes of rotation."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "3d_shape",
+                    "config": { "shape": "cube", "label": "Rotate the cube — find its symmetry axes" }
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "Planes of symmetry", "body": "A plane that divides a solid into two mirror-image halves. A cube has 9 planes of symmetry." },
+                      { "title": "Rotational symmetry", "body": "Spin the shape around an axis — if it looks the same after less than 360°, it has rotational symmetry." },
+                      { "title": "Order of rotational symmetry", "body": "A square face of a cube has order-4 rotational symmetry (looks same after 90°, 180°, 270°, 360°)." }
+                    ]
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "How many planes of symmetry does a cylinder have?",
+                    "options": ["1", "2", "Infinitely many", "0"],
+                    "answer": "Infinitely many",
+                    "hint": "Think about cutting a cylinder through its central axis at any angle.",
+                    "explanation": "Any plane through the central axis creates two mirror halves. Since the axis can be rotated to any angle, there are infinitely many planes of symmetry."
+                  }
+                }
+              ]
+            },
+
+            {
+              "id": "les-3d-027",
+              "title": "Composite Solids",
+              "subtitle": "Combining shapes to solve real-world problems",
+              "order": 1,
+              "estimated_minutes": 9,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "Real-world objects are often **composite solids** — combinations of simpler shapes. A pencil is a cylinder with a cone on top. A silo is a cylinder with a hemisphere on top. To find the surface area or volume of a composite solid, **break it into parts** and add (or subtract) carefully."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      { "title": "Step 1: Identify the parts", "body": "Sketch the solid and label each component shape." },
+                      { "title": "Step 2: Note shared surfaces", "body": "Surfaces where two parts join are NOT part of the outer surface — subtract them." },
+                      { "title": "Step 3: Calculate each part", "body": "Find SA or volume of each component separately." },
+                      { "title": "Step 4: Combine", "body": "Add volumes. For SA: add exposed faces only, not internal joins." }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "equation",
+                  "data": {
+                    "latex": "V_{silo} = \\pi r^2 h + \\frac{2}{3}\\pi r^3",
+                    "label": "Cylinder (πr²h) + hemisphere (⅔πr³) = silo volume"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "value_table",
+                    "config": {
+                      "label": "Silo volume: cylinder part πr²h (r=4, vary h)",
+                      "function_type": "linear",
+                      "param_label": "Height h",
+                      "param_min": 2,
+                      "param_max": 12,
+                      "rows": 5
+                    }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "A toy is made of a cylinder (r=3, h=8) topped by a hemisphere (r=3). What is the total volume? (π ≈ 3.14)",
+                    "options": ["226.08 cm³", "282.6 cm³", "339.12 cm³", "395.64 cm³"],
+                    "answer": "282.6 cm³",
+                    "hint": "V_cyl = π×9×8 = 72π. V_hemi = ⅔×π×27 = 18π. Total = 90π.",
+                    "explanation": "V = 72π + 18π = 90π ≈ 90 × 3.14 = 282.6 cm³"
+                  }
+                },
+                {
+                  "id": "b6",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "drag_sort",
+                    "config": {
+                      "label": "Order the steps to find volume of a composite solid",
+                      "items": [
+                        "1. Identify the component shapes",
+                        "2. Find dimensions of each part",
+                        "3. Calculate volume of each part",
+                        "4. Add all volumes together"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": "b7",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "drag_sort",
+                    "config": {
+                      "label": "Order the steps to find volume of a composite solid",
+                      "items": [
+                        "1. Identify the component shapes",
+                        "2. Find dimensions of each part",
+                        "3. Calculate volume of each part",
+                        "4. Add all volumes together"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

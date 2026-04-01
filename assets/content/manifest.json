@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "subjects": [
+    "math/algebra.json",
+    "math/geometry_3d.json",
+    "physics/mechanics.json"
+  ]
+}

@@ -1,0 +1,431 @@
+{
+  "id": "subj-math-001",
+  "name": "Mathematics",
+  "description": "Master math from algebra to calculus",
+  "icon_asset": "assets/images/icons/math.png",
+  "color_index": 0,
+  "order": 0,
+  "module_ids": ["mod-alg-001"],
+  "modules": [
+    {
+      "id": "mod-alg-001",
+      "title": "Algebra & Equations",
+      "description": "From variables to quadratics — the language of mathematics",
+      "order": 0,
+      "chapter_ids": ["ch-vars-001", "ch-linear-001", "ch-quad-001"],
+      "chapters": [
+        {
+          "id": "ch-vars-001",
+          "title": "Variables & Expressions",
+          "summary": "Understand what variables are, how to write expressions, and how to evaluate them by substituting values.",
+          "order": 0,
+          "lesson_ids": ["les-var-001", "les-var-002", "les-var-003"],
+          "lessons": [
+            {
+              "id": "les-var-001",
+              "title": "What is a variable?",
+              "subtitle": "The building block of algebra",
+              "order": 0,
+              "estimated_minutes": 4,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "In everyday life, we often deal with unknown quantities. You might not know how many apples are in a bag, or what temperature it will be tomorrow. In algebra, we use a **variable** — usually a letter like x, y, or n — to represent an unknown value."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      {
+                        "title": "A variable is a placeholder",
+                        "body": "Think of x as an empty box. The box can hold any number — until we figure out what number fits."
+                      },
+                      {
+                        "title": "Variables can represent anything",
+                        "body": "If apples cost ₹5 each, and you buy x apples, your total cost is 5x. Here x is how many apples you buy."
+                      },
+                      {
+                        "title": "Common variable names",
+                        "body": "x, y, z are most common. In physics, t often means time, d means distance, and v means velocity."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "equation",
+                  "data": {
+                    "latex": "\\text{Total cost} = 5 \\times x",
+                    "label": "If each apple costs ₹5 and you buy x apples"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "If y = number of students in a class, which expression means 'double the number of students'?",
+                    "options": ["y + 2", "2y", "y ÷ 2", "y − 2"],
+                    "answer": "2y",
+                    "hint": "Think about what 'double' means — two times the original amount.",
+                    "explanation": "2y means 2 × y, which is indeed double the number of students."
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "text",
+                  "data": {
+                    "markdown": "An **expression** is a combination of variables and numbers using operations like +, −, ×, ÷. For example, 3x + 7 is an expression — it doesn't have an equals sign, it just represents a value."
+                  }
+                },
+                {
+                  "id": "b6",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "trueFalse",
+                    "question": "The expression 4n − 3 is an equation.",
+                    "answer": "False",
+                    "hint": "An equation always has an = sign.",
+                    "explanation": "4n − 3 is an expression (no = sign). An equation would be 4n − 3 = 9."
+                  }
+                }
+              ]
+            },
+            {
+              "id": "les-var-002",
+              "title": "Evaluating expressions",
+              "subtitle": "Substituting values into expressions",
+              "order": 1,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "To **evaluate** an expression means to find its value when we know what the variable equals. We simply replace (substitute) the variable with the given number and calculate."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      {
+                        "title": "Step 1: Write the expression",
+                        "body": "Start with the expression you need to evaluate. Example: 3x + 5"
+                      },
+                      {
+                        "title": "Step 2: Substitute the value",
+                        "body": "Replace every x with the given number. If x = 4: 3(4) + 5"
+                      },
+                      {
+                        "title": "Step 3: Calculate",
+                        "body": "Follow BODMAS: 3(4) + 5 = 12 + 5 = 17"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "equation",
+                  "data": {
+                    "latex": "3x + 5 \\Big|_{x=4} = 3(4) + 5 = 12 + 5 = 17",
+                    "label": "Evaluating 3x + 5 when x = 4"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "fillInBlank",
+                  "data": {
+                    "template": "If x = 3, then 2x + 1 = ___",
+                    "blanks": ["7"],
+                    "hint": "Replace x with 3: 2(3) + 1 = ?"
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "If a = 5 and b = 2, what is the value of 3a − 4b?",
+                    "options": ["7", "15", "23", "11"],
+                    "answer": "7",
+                    "hint": "Substitute: 3(5) − 4(2) = 15 − 8",
+                    "explanation": "3(5) − 4(2) = 15 − 8 = 7"
+                  }
+                },
+                {
+                  "id": "b6",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "number_line",
+                    "config": {
+                      "min": -5,
+                      "max": 15,
+                      "label": "Slide to explore values of x"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "les-var-003",
+              "title": "Writing expressions from word problems",
+              "subtitle": "Translating English into algebra",
+              "order": 2,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "One of the most important algebra skills is **translating** word problems into expressions. Certain words signal specific operations. Learn to spot these keywords."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      {
+                        "title": "Addition words",
+                        "body": "'Sum', 'more than', 'increased by', 'total of', 'plus' → use +"
+                      },
+                      {
+                        "title": "Subtraction words",
+                        "body": "'Difference', 'less than', 'decreased by', 'fewer than', 'minus' → use −"
+                      },
+                      {
+                        "title": "Multiplication words",
+                        "body": "'Product', 'times', 'multiplied by', 'of', 'twice/double/triple' → use ×"
+                      },
+                      {
+                        "title": "Division words",
+                        "body": "'Quotient', 'divided by', 'split equally', 'per', 'ratio of' → use ÷"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "fillInBlank",
+                  "data": {
+                    "template": "'5 more than n' translates to ___",
+                    "blanks": ["n + 5"],
+                    "hint": "'More than' means addition"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "Which expression represents 'three times a number decreased by 8'?",
+                    "options": ["3 + n − 8", "3n − 8", "8 − 3n", "3(n + 8)"],
+                    "answer": "3n − 8",
+                    "hint": "'Three times a number' = 3n, 'decreased by 8' = − 8",
+                    "explanation": "'Three times a number' = 3n, then 'decreased by 8' subtracts 8, giving 3n − 8."
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "fillBlank",
+                    "question": "Write the expression: 'the product of 6 and x, increased by 4'",
+                    "answer": "6x + 4",
+                    "hint": "Product of 6 and x = 6x, increased by 4 = + 4"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ch-linear-001",
+          "title": "Linear Equations",
+          "summary": "Learn to solve equations with one variable using inverse operations and balancing both sides.",
+          "order": 1,
+          "lesson_ids": ["les-lin-001", "les-lin-002"],
+          "lessons": [
+            {
+              "id": "les-lin-001",
+              "title": "Solving one-step equations",
+              "subtitle": "Using inverse operations",
+              "order": 0,
+              "estimated_minutes": 5,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "An **equation** is a statement that two expressions are equal. To **solve** an equation means to find the value of the variable that makes the equation true. The key principle: whatever you do to one side, you must do to the other."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "x + 7 = 12 \\Rightarrow x = 12 - 7 = 5",
+                    "label": "Subtract 7 from both sides to isolate x"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "number_line",
+                    "config": {
+                      "min": 0,
+                      "max": 20,
+                      "label": "Find x on the number line"
+                    }
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "Solve for x:  x − 9 = 4",
+                    "answer": "13",
+                    "hint": "Add 9 to both sides",
+                    "explanation": "x − 9 = 4  →  x = 4 + 9 = 13"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "les-lin-002",
+              "title": "Solving two-step equations",
+              "subtitle": "Undo operations in reverse order",
+              "order": 1,
+              "estimated_minutes": 6,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "When an equation requires two operations to solve, we undo them in **reverse order** — like undoing layers of wrapping on a gift."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "conceptReveal",
+                  "data": {
+                    "steps": [
+                      {
+                        "title": "Identify the operations on x",
+                        "body": "For 2x + 3 = 11: x is first multiplied by 2, then 3 is added."
+                      },
+                      {
+                        "title": "Undo in reverse: first subtract",
+                        "body": "2x + 3 − 3 = 11 − 3  →  2x = 8"
+                      },
+                      {
+                        "title": "Then divide",
+                        "body": "2x ÷ 2 = 8 ÷ 2  →  x = 4"
+                      },
+                      {
+                        "title": "Always check your answer",
+                        "body": "Substitute back: 2(4) + 3 = 8 + 3 = 11 ✓"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "equationInput",
+                    "question": "Solve for x:  3x − 5 = 16",
+                    "answer": "7",
+                    "hint": "Step 1: add 5 to both sides. Step 2: divide both sides by 3.",
+                    "explanation": "3x − 5 = 16 → 3x = 21 → x = 7"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "draggable_graph",
+                    "config": {
+                      "label": "Explore how changing m and b shifts the line y = mx + b"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ch-quad-001",
+          "title": "Quadratic Equations",
+          "summary": "Explore equations where x is squared and learn multiple methods to solve them.",
+          "order": 2,
+          "lesson_ids": ["les-quad-001"],
+          "lessons": [
+            {
+              "id": "les-quad-001",
+              "title": "Introduction to quadratics",
+              "subtitle": "When x gets squared",
+              "order": 0,
+              "estimated_minutes": 7,
+              "blocks": [
+                {
+                  "id": "b1",
+                  "type": "text",
+                  "data": {
+                    "markdown": "A **quadratic equation** has an x² term. It looks like ax² + bx + c = 0. Quadratics appear everywhere — in the path of a thrown ball, the shape of satellite dishes, and optimisation problems."
+                  }
+                },
+                {
+                  "id": "b2",
+                  "type": "equation",
+                  "data": {
+                    "latex": "ax^2 + bx + c = 0 \\quad (a \\neq 0)",
+                    "label": "Standard form of a quadratic equation"
+                  }
+                },
+                {
+                  "id": "b3",
+                  "type": "equation",
+                  "data": {
+                    "latex": "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
+                    "label": "The quadratic formula — works for any quadratic"
+                  }
+                },
+                {
+                  "id": "b4",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "draggable_graph",
+                    "config": {
+                      "label": "Drag points to explore a line — parabola widget coming soon!"
+                    }
+                  }
+                },
+                {
+                  "id": "b5",
+                  "type": "quiz",
+                  "data": {
+                    "quizType": "mcq",
+                    "question": "For x² − 5x + 6 = 0, what is the discriminant (b² − 4ac)?",
+                    "options": ["1", "4", "−1", "25"],
+                    "answer": "1",
+                    "hint": "a = 1, b = −5, c = 6. Calculate (−5)² − 4(1)(6)",
+                    "explanation": "(−5)² − 4(1)(6) = 25 − 24 = 1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

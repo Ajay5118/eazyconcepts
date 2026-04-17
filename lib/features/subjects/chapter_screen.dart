@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/routes.dart';
+import '../../core/models/content_models.dart';
 import '../../data/local/providers.dart';
 import '../../data/local/content_repository.dart';
 import '../../shared/widgets/star_row.dart';
@@ -168,105 +169,12 @@ class ChapterScreen extends ConsumerWidget {
                                   ?.isCompleted ??
                               false));
 
-                  return GestureDetector(
-                    onTap: () => Navigator.pushNamed(
-                      context,
-                      AppRoutes.lesson,
-                      arguments: lesson.id,
-                    ),
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? AppColors.darkSurface
-                            : AppColors.lightSurface,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: isNext
-                              ? AppColors.buttonPurpleStart.withOpacity(0.4)
-                              : (isDark
-                                  ? AppColors.darkBorder
-                                  : AppColors.lightBorder),
-                          width: isNext ? 1.5 : 0.5,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          // Status icon
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              gradient: isCompleted
-                                  ? const LinearGradient(
-                                      colors: [
-                                        AppColors.success,
-                                        Color(0xFF0F6E56)
-                                      ],
-                                    )
-                                  : isNext
-                                      ? AppColors.buttonGradient
-                                      : null,
-                              color: (!isCompleted && !isNext)
-                                  ? (isDark
-                                      ? AppColors.darkSurface2
-                                      : AppColors.lightSurface2)
-                                  : null,
-                              shape: BoxShape.circle,
-                            ),
-                            alignment: Alignment.center,
-                            child: isCompleted
-                                ? const Icon(Icons.check_rounded,
-                                    size: 16, color: Colors.white)
-                                : Text(
-                                    '${i + 1}',
-                                    style: AppTextStyles.labelSmall.copyWith(
-                                      color: isNext
-                                          ? Colors.white
-                                          : (isDark
-                                              ? AppColors.darkTextTertiary
-                                              : AppColors.lightTextTertiary),
-                                    ),
-                                  ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  lesson.title,
-                                  style: AppTextStyles.bodyMedium.copyWith(
-                                    color: isDark
-                                        ? AppColors.darkTextPrimary
-                                        : AppColors.lightTextPrimary,
-                                    fontWeight: isNext
-                                        ? FontWeight.w600
-                                        : FontWeight.w400,
-                                  ),
-                                ),
-                                Text(
-                                  '${lesson.estimatedMinutes} min',
-                                  style: AppTextStyles.labelSmall.copyWith(
-                                    color: isDark
-                                        ? AppColors.darkTextTertiary
-                                        : AppColors.lightTextTertiary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (isCompleted)
-                            const Icon(Icons.star_rounded,
-                                size: 16, color: AppColors.starGold)
-                          else if (isNext)
-                            const Icon(Icons.play_arrow_rounded,
-                                size: 20,
-                                color: AppColors.buttonPurpleStart),
-                        ],
-                      ),
-                    ),
+                  return _VerticalLessonCard(
+                    lesson: lesson,
+                    isCompleted: isCompleted,
+                    isNext: isNext,
+                    index: i,
+                    totalLessons: lessons.length,
                   );
                 },
                 childCount: lessons.length,
@@ -274,6 +182,162 @@ class ChapterScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Vertical Lesson Card (Flode Style Implementation)
+// ─────────────────────────────────────────────────────────────────────────────
+class _VerticalLessonCard extends StatelessWidget {
+  final Lesson lesson;
+  final bool isCompleted;
+  final bool isNext;
+  final int index;
+  final int totalLessons;
+
+  const _VerticalLessonCard({
+    required this.lesson,
+    required this.isCompleted,
+    required this.isNext,
+    required this.index,
+    required this.totalLessons,
+  });
+
+  String get _lessonType {
+    if (lesson.blocks.any((b) => b.type == LessonBlockType.quiz)) return 'quiz';
+    if (lesson.blocks.any((b) => b.type == LessonBlockType.interactive)) return 'practice';
+    return 'lesson';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, AppRoutes.lesson, arguments: lesson.id),
+      child: Container(
+        height: 140,
+        margin: const EdgeInsets.only(bottom: 20),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // ── Vertical connecting divider to next ──
+            if (index != totalLessons - 1)
+              Positioned(
+                top: 80,
+                bottom: -30,
+                left: 60,
+                child: Container(
+                  width: 5,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color.fromRGBO(35, 10, 62, 1),
+                        Color.fromRGBO(140, 72, 205, 1),
+                        Color.fromRGBO(35, 10, 62, 1),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+              ),
+
+            // ── Card background (Square badge) ──
+            Positioned(
+              top: 10,
+              left: 0,
+              child: Container(
+                height: 120,
+                width: 120,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/img/chapter_card.png'),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                child: Center(
+                  child: Image.asset(
+                    _lessonType == 'quiz' ? 'assets/img/practice.png' 
+                    : _lessonType == 'practice' ? 'assets/img/lession.png'
+                    : 'assets/img/ccc.png',
+                    width: 45,
+                    errorBuilder: (_, __, ___) => const Icon(Icons.menu_book_rounded, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+
+            // ── Text Label Box (Border wrapper) ──
+            Positioned(
+              top: 30,
+              left: 95, 
+              right: 0,
+              child: Container(
+                height: 80,
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/img/card_border.png'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      _lessonType == 'lesson' ? 'assets/img/piano.png' : 'assets/img/play.png',
+                      height: 30,
+                      errorBuilder: (_, __, ___) => const Icon(Icons.play_circle_fill, color: AppColors.buttonDeepVioletEnd),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                           Text(
+                             lesson.title,
+                             style: AppTextStyles.headline3.copyWith(
+                               fontSize: 13,
+                               color: AppColors.buttonDeepVioletEnd,
+                             ),
+                             maxLines: 2,
+                             overflow: TextOverflow.ellipsis,
+                           ),
+                           Text(
+                             '${_lessonType.toUpperCase()} • ${lesson.estimatedMinutes} min',
+                             style: AppTextStyles.labelSmall.copyWith(
+                               color: Colors.grey.shade700,
+                               fontSize: 10,
+                             ),
+                           ),
+                        ],
+                      ),
+                    ),
+                    if (isCompleted)
+                      Image.asset('assets/img/star_2.png', height: 35, errorBuilder: (_, __, ___) => const Icon(Icons.star_rounded, color: AppColors.starGold, size: 28))
+                    else if (isNext)
+                      const Icon(Icons.play_circle_fill_rounded, color: AppColors.buttonPurpleStart, size: 28),
+                  ],
+                ),
+              ),
+            ),
+            
+            // ── Stars on top left if rated ──
+            if (isCompleted)
+              Positioned(
+                 top: -10,
+                 left: 30,
+                 child: Row(
+                   children: [
+                     Image.asset('assets/img/star_1.png', height: 20),
+                     Image.asset('assets/img/star_2.png', height: 30),
+                     Image.asset('assets/img/star_3.png', height: 20),
+                   ],
+                 ),
+              ),
+          ],
+        ),
       ),
     );
   }

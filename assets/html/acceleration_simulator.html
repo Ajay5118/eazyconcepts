@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceleration Simulator — s = ut + ½at²</title>
+<style>
+  :root {
+    --bg: #F5F4F0;
+    --surface: #FFFFFF;
+    --surface2: #EEECEA;
+    --border: #E0DED6;
+    --text1: #1A1A1A;
+    --text2: #6B6966;
+    --text3: #9E9B96;
+    --purple: #7F77DD;
+    --purple-light: rgba(127,119,221,0.12);
+    --purple-area: rgba(127,119,221,0.22);
+    --ghost-line: #B8B6B0;
+    --ghost-fill: rgba(184,182,176,0.10);
+    --amber: #EF9F27;
+    --green: #1D9E75;
+    --coral: #D85A30;
+    --card-shadow: none;
+  }
+  @media(prefers-color-scheme:dark){
+    :root {
+      --bg: #0E0E10;
+      --surface: #1A1A1E;
+      --surface2: #242428;
+      --border: #333338;
+      --text1: #F0EFE9;
+      --text2: #9E9B96;
+      --text3: #5F5E5A;
+      --ghost-line: #555;
+      --ghost-fill: rgba(85,85,85,0.10);
+      --purple-light: rgba(127,119,221,0.18);
+    }
+  }
+  *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text1);
+    padding: 16px;
+    max-width: 780px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+  h1 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2px;
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--text3);
+    font-size: 0.82rem;
+    margin-bottom: 18px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Presets ─────────────────────── */
+  .presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .preset-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    color: var(--text1);
+    transition: border-color 0.15s, background 0.15s;
+    font-weight: 600;
+  }
+  .preset-btn:hover, .preset-btn.active {
+    border-color: var(--purple);
+    background: var(--purple-light);
+  }
+
+  /* ── Sliders ────────────────────── */
+  .sliders {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .slider-group label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+  }
+  .slider-group .val {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--purple);
+    margin-bottom: 4px;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--purple);
+    cursor: pointer;
+    border: 3px solid var(--surface);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--purple);
+    cursor: pointer;
+    border: 3px solid var(--surface);
+  }
+
+  /* ── Controls ───────────────────── */
+  .controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .ctrl-btn {
+    padding: 8px 22px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text1);
+    transition: all 0.15s;
+  }
+  .ctrl-btn.play {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+  }
+  .ctrl-btn.play:hover { opacity:0.88; }
+  .ctrl-btn:hover { border-color: var(--purple); }
+
+  /* ── Narration ──────────────────── */
+  .narration {
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--text2);
+    min-height: 24px;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  /* ── Track ───────────────────────── */
+  .track-wrap {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 18px 10px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .track-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+  .track {
+    position: relative;
+    height: 56px;
+    margin-bottom: 4px;
+  }
+  .track-axis {
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    height: 2px;
+    background: var(--border);
+  }
+  .track .car {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    z-index: 3;
+    transition: none;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.12));
+  }
+  .car.wobble {
+    animation: wobble 0.12s ease-in-out infinite alternate;
+  }
+  @keyframes wobble {
+    0%  { transform: translate(-50%, -50%) rotate(-1.5deg); }
+    100%{ transform: translate(-50%, -50%) rotate(1.5deg); }
+  }
+  .speed-lines {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text3);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .speed-lines.visible { opacity: 0.8; }
+  .ticks {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1px;
+  }
+  .ticks span {
+    font-size: 0.62rem;
+    color: var(--text3);
+    text-align: center;
+    min-width: 28px;
+  }
+
+  /* ── Graph ───────────────────────── */
+  .graph-wrap {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .graph-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+    background: var(--surface2);
+  }
+
+  /* ── Stats ───────────────────────── */
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .stat-card .stat-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text3);
+    margin-bottom: 3px;
+  }
+  .stat-card .stat-val {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text1);
+  }
+  .stat-card .stat-unit {
+    font-size: 0.72rem;
+    color: var(--text2);
+  }
+  .stat-card .stat-prev {
+    font-size: 0.68rem;
+    color: var(--text3);
+    margin-top: 3px;
+  }
+  .stat-card .stat-delta {
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-top: 1px;
+  }
+  .stat-delta.pos { color: var(--green); }
+  .stat-delta.neg { color: var(--coral); }
+
+  /* ── Freeze label ───────────────── */
+  .freeze-badge {
+    display: none;
+    position: absolute;
+    top: 12px; right: 14px;
+    background: var(--amber);
+    color: #fff;
+    font-size: 0.66rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .freeze-badge.show { display: inline-block; }
+
+  /* ── Footer ─────────────────────── */
+  .foot {
+    text-align: center;
+    font-size: 0.68rem;
+    color: var(--text3);
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>🏎️ Acceleration Simulator</h1>
+<p class="subtitle">s = ut + ½at²</p>
+
+<!-- Presets -->
+<div class="presets" id="presets">
+  <button class="preset-btn" data-u="4"  data-a="1.5" data-t="6">🚲 Bicycle</button>
+  <button class="preset-btn" data-u="0"  data-a="9"   data-t="8">🚀 Rocket launch</button>
+  <button class="preset-btn" data-u="14" data-a="-2"  data-t="7">🎾 Thrown ball</button>
+  <button class="preset-btn" data-u="18" data-a="-5"  data-t="5">🛑 Hard brake</button>
+</div>
+
+<!-- Sliders -->
+<div class="sliders">
+  <div class="slider-group">
+    <label>Starting speed (u)</label>
+    <div class="val" id="uVal">5.0 m/s</div>
+    <input type="range" id="uSlider" min="0" max="20" step="0.5" value="5">
+  </div>
+  <div class="slider-group">
+    <label>Acceleration (a)</label>
+    <div class="val" id="aVal">2.0 m/s²</div>
+    <input type="range" id="aSlider" min="-5" max="10" step="0.5" value="2">
+  </div>
+  <div class="slider-group">
+    <label>Total time (T)</label>
+    <div class="val" id="tVal">5 s</div>
+    <input type="range" id="tSlider" min="1" max="10" step="0.5" value="5">
+  </div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <button class="ctrl-btn play" id="playBtn">▶ Play</button>
+  <button class="ctrl-btn" id="freezeBtn">⏸ Freeze Frame</button>
+  <button class="ctrl-btn" id="resetBtn">↺ Reset</button>
+</div>
+
+<!-- Narration -->
+<div class="narration" id="narration">Adjust the sliders and press Play!</div>
+
+<!-- Track -->
+<div class="track-wrap">
+  <div class="track-label">Simulation Track</div>
+  <div class="track" id="track">
+    <div class="track-axis"></div>
+    <div class="speed-lines" id="speedLines">— — – – - -</div>
+    <div class="car" id="car">🚗</div>
+  </div>
+  <div class="ticks" id="ticks"></div>
+</div>
+
+<!-- Graph -->
+<div class="graph-wrap">
+  <div class="graph-title">Distance vs Time</div>
+  <span class="freeze-badge" id="freezeBadge">⏸ FROZEN</span>
+  <canvas id="graphCanvas" height="220"></canvas>
+</div>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-label">Distance</div>
+    <div class="stat-val" id="statDist">0.0</div>
+    <div class="stat-unit">metres</div>
+    <div class="stat-prev" id="prevDist"></div>
+    <div class="stat-delta" id="deltaDist"></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Speed</div>
+    <div class="stat-val" id="statSpeed">0.0</div>
+    <div class="stat-unit">m/s</div>
+    <div class="stat-prev" id="prevSpeed"></div>
+    <div class="stat-delta" id="deltaSpeed"></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Time</div>
+    <div class="stat-val" id="statTime">0.0</div>
+    <div class="stat-unit">seconds</div>
+    <div class="stat-prev" id="prevTime"></div>
+    <div class="stat-delta" id="deltaTime"></div>
+  </div>
+</div>
+
+<div class="foot">Interactive physics for curious minds 🧠</div>
+
+<script>
+// ── Elements ────────────────────────────────────────────────────────────────
+const uSlider   = document.getElementById('uSlider');
+const aSlider   = document.getElementById('aSlider');
+const tSlider   = document.getElementById('tSlider');
+const uVal      = document.getElementById('uVal');
+const aVal      = document.getElementById('aVal');
+const tVal      = document.getElementById('tVal');
+const playBtn   = document.getElementById('playBtn');
+const freezeBtn = document.getElementById('freezeBtn');
+const resetBtn  = document.getElementById('resetBtn');
+const car       = document.getElementById('car');
+const track     = document.getElementById('track');
+const ticksEl   = document.getElementById('ticks');
+const canvas    = document.getElementById('graphCanvas');
+const ctx       = canvas.getContext('2d');
+const narration = document.getElementById('narration');
+const speedLines= document.getElementById('speedLines');
+const freezeBadge = document.getElementById('freezeBadge');
+
+const statDist  = document.getElementById('statDist');
+const statSpeed = document.getElementById('statSpeed');
+const statTime_ = document.getElementById('statTime');
+const prevDist  = document.getElementById('prevDist');
+const prevSpeed = document.getElementById('prevSpeed');
+const prevTime  = document.getElementById('prevTime');
+const deltaDist = document.getElementById('deltaDist');
+const deltaSpeed= document.getElementById('deltaSpeed');
+const deltaTime = document.getElementById('deltaTime');
+
+// ── State ───────────────────────────────────────────────────────────────────
+let u = 5, a = 2, T = 5;
+let running = false, frozen = false;
+let simTime = 0;
+let animId = null;
+let lastTimestamp = null;
+let freezeT = null;
+
+// Ghost trace
+let ghostData = null;   // { points: [{t,s}], maxS, u, a, T, finalS, finalV }
+let currentPoints = []; // [{t,s}] built during current run
+
+const SPEED_SCALE = 1.5; // seconds real-time per sim-second
+
+// ── Physics ─────────────────────────────────────────────────────────────────
+function calcS(u, a, t) { return Math.max(0, u * t + 0.5 * a * t * t); }
+function calcV(u, a, t) { return Math.max(0, u + a * t); }
+
+function maxDistance() { return calcS(u, a, T); }
+
+// ── Slider updates ──────────────────────────────────────────────────────────
+function syncSliders() {
+  u = parseFloat(uSlider.value);
+  a = parseFloat(aSlider.value);
+  T = parseFloat(tSlider.value);
+  uVal.textContent = u.toFixed(1) + ' m/s';
+  aVal.textContent = a.toFixed(1) + ' m/s²';
+  tVal.textContent = T.toFixed(1) + ' s';
+  buildTicks();
+}
+uSlider.addEventListener('input', syncSliders);
+aSlider.addEventListener('input', syncSliders);
+tSlider.addEventListener('input', syncSliders);
+
+// ── Presets ──────────────────────────────────────────────────────────────────
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    uSlider.value = btn.dataset.u;
+    aSlider.value = btn.dataset.a;
+    tSlider.value = btn.dataset.t;
+    syncSliders();
+  });
+});
+
+// ── Ticks ────────────────────────────────────────────────────────────────────
+function buildTicks() {
+  const maxD = maxDistance();
+  ticksEl.innerHTML = '';
+  const n = 6;
+  for (let i = 0; i <= n; i++) {
+    const sp = document.createElement('span');
+    sp.textContent = (maxD * i / n).toFixed(0) + 'm';
+    ticksEl.appendChild(sp);
+  }
+}
+
+// ── Canvas sizing ───────────────────────────────────────────────────────────
+function sizeCanvas() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width  = Math.round((rect.width - 36) * devicePixelRatio);
+  canvas.height = Math.round(220 * devicePixelRatio);
+  canvas.style.height = '220px';
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+}
+window.addEventListener('resize', () => { sizeCanvas(); drawGraph(); });
+
+// ── Draw Graph ──────────────────────────────────────────────────────────────
+function drawGraph() {
+  const W = canvas.width / devicePixelRatio;
+  const H = canvas.height / devicePixelRatio;
+  const pad = { l: 42, r: 14, t: 14, b: 28 };
+  const gW = W - pad.l - pad.r;
+  const gH = H - pad.t - pad.b;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Compute maxS across current + ghost
+  const curMaxS = maxDistance();
+  let plotMaxS = curMaxS || 1;
+  if (ghostData && ghostData.maxS > plotMaxS) plotMaxS = ghostData.maxS;
+  plotMaxS *= 1.12; // breathing room
+  const plotMaxT = T;
+
+  function toX(t) { return pad.l + (t / plotMaxT) * gW; }
+  function toY(s) { return pad.t + gH - (s / plotMaxS) * gH; }
+
+  // Grid lines
+  ctx.strokeStyle = getCSS('--border');
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 5; i++) {
+    const y = pad.t + gH * i / 5;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + gW, y); ctx.stroke();
+  }
+  for (let i = 0; i <= 5; i++) {
+    const x = pad.l + gW * i / 5;
+    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + gH); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = getCSS('--text3');
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t + gH); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(pad.l, pad.t + gH); ctx.lineTo(pad.l + gW, pad.t + gH); ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle = getCSS('--text3');
+  ctx.font = '600 9px system-ui';
+  ctx.textAlign = 'center';
+  for (let i = 0; i <= 5; i++) {
+    const tv = (plotMaxT * i / 5);
+    ctx.fillText(tv.toFixed(1) + 's', toX(tv), pad.t + gH + 16);
+  }
+  ctx.textAlign = 'right';
+  for (let i = 0; i <= 5; i++) {
+    const sv = (plotMaxS * i / 5);
+    ctx.fillText(sv.toFixed(0), pad.l - 6, toY(sv) + 3);
+  }
+
+  // ── Ghost trace ──
+  if (ghostData && ghostData.points.length > 1) {
+    // Ghost filled area
+    ctx.beginPath();
+    ctx.moveTo(toX(ghostData.points[0].t), toY(0));
+    ghostData.points.forEach(p => ctx.lineTo(toX(p.t), toY(p.s)));
+    ctx.lineTo(toX(ghostData.points[ghostData.points.length - 1].t), toY(0));
+    ctx.closePath();
+    ctx.fillStyle = getCSS('--ghost-fill');
+    ctx.fill();
+
+    // Ghost dashed line
+    ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = getCSS('--ghost-line');
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ghostData.points.forEach((p, i) => {
+      if (i === 0) ctx.moveTo(toX(p.t), toY(p.s));
+      else ctx.lineTo(toX(p.t), toY(p.s));
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // ── Active trace ──
+  if (currentPoints.length > 1) {
+    // Filled area
+    ctx.beginPath();
+    ctx.moveTo(toX(currentPoints[0].t), toY(0));
+    currentPoints.forEach(p => ctx.lineTo(toX(p.t), toY(p.s)));
+    ctx.lineTo(toX(currentPoints[currentPoints.length - 1].t), toY(0));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(127,119,221,0.18)';
+    ctx.fill();
+
+    // Bold line
+    ctx.strokeStyle = '#7F77DD';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    currentPoints.forEach((p, i) => {
+      if (i === 0) ctx.moveTo(toX(p.t), toY(p.s));
+      else ctx.lineTo(toX(p.t), toY(p.s));
+    });
+    ctx.stroke();
+
+    // Current dot
+    const last = currentPoints[currentPoints.length - 1];
+    ctx.beginPath();
+    ctx.arc(toX(last.t), toY(last.s), 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#7F77DD';
+    ctx.fill();
+  }
+
+  // ── Freeze crosshairs ──
+  if (frozen && freezeT !== null) {
+    const fs = calcS(u, a, freezeT);
+    const fx = toX(freezeT);
+    const fy = toY(fs);
+
+    ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = '#EF9F27';
+    ctx.lineWidth = 1.5;
+
+    // Vertical to x-axis
+    ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, pad.t + gH); ctx.stroke();
+    // Horizontal to y-axis
+    ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(pad.l, fy); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Labels
+    ctx.font = '700 10px system-ui';
+    ctx.fillStyle = '#EF9F27';
+    ctx.textAlign = 'center';
+    ctx.fillText('t=' + freezeT.toFixed(1) + 's', fx, pad.t + gH + 26);
+    ctx.textAlign = 'right';
+    ctx.fillText(fs.toFixed(1) + 'm', pad.l - 4, fy - 6);
+
+    // Dot at freeze point
+    ctx.beginPath();
+    ctx.arc(fx, fy, 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#EF9F27';
+    ctx.fill();
+  }
+}
+
+// ── Narration ───────────────────────────────────────────────────────────────
+function updateNarration(t) {
+  const v = calcV(u, a, t);
+  const s = calcS(u, a, t);
+  let msg = '';
+  if (a > 3)       msg = "🔥 Zooming faster and faster! Speed: " + v.toFixed(1) + " m/s";
+  else if (a > 0.5) msg = "🏃 Speeding up steadily — Speed: " + v.toFixed(1) + " m/s";
+  else if (a > -0.5) msg = "➡️ Constant speed — no acceleration!";
+  else if (v > 0.5) msg = "🛑 Slowing down… brakes are on! Speed: " + v.toFixed(1) + " m/s";
+  else              msg = "🧊 Stopped! Distance covered: " + s.toFixed(1) + " m";
+  narration.textContent = msg;
+}
+
+// ── Stats ───────────────────────────────────────────────────────────────────
+function updateStats(t) {
+  const s = calcS(u, a, t);
+  const v = calcV(u, a, t);
+  statDist.textContent  = s.toFixed(1);
+  statSpeed.textContent = v.toFixed(1);
+  statTime_.textContent = t.toFixed(1);
+
+  if (ghostData) {
+    prevDist.textContent  = 'prev: ' + ghostData.finalS.toFixed(1) + ' m';
+    prevSpeed.textContent = 'prev: ' + ghostData.finalV.toFixed(1) + ' m/s';
+    prevTime.textContent  = 'prev: ' + ghostData.T.toFixed(1) + ' s';
+
+    setDelta(deltaDist,  s - ghostData.finalS, ' m');
+    setDelta(deltaSpeed, v - ghostData.finalV, ' m/s');
+    setDelta(deltaTime,  t - ghostData.T, ' s');
+  } else {
+    prevDist.textContent  = '';
+    prevSpeed.textContent = '';
+    prevTime.textContent  = '';
+    deltaDist.textContent = '';
+    deltaSpeed.textContent= '';
+    deltaTime.textContent = '';
+  }
+}
+
+function setDelta(el, val, unit) {
+  if (Math.abs(val) < 0.05) {
+    el.textContent = '—';
+    el.className = 'stat-delta';
+    return;
+  }
+  const sign = val > 0 ? '+' : '';
+  el.textContent = sign + val.toFixed(1) + unit;
+  el.className = 'stat-delta ' + (val > 0 ? 'pos' : 'neg');
+}
+
+// ── Car position ────────────────────────────────────────────────────────────
+function updateCar(t) {
+  const s = calcS(u, a, t);
+  const maxD = maxDistance() || 1;
+  const trackW = track.clientWidth;
+  const frac = Math.min(s / maxD, 1);
+  const px = 20 + frac * (trackW - 40);
+  car.style.left = px + 'px';
+
+  // Wobble and speed lines
+  const v = calcV(u, a, t);
+  if (a > 3 && running && !frozen) {
+    car.classList.add('wobble');
+    speedLines.classList.add('visible');
+    speedLines.style.left = (px - 80) + 'px';
+  } else {
+    car.classList.remove('wobble');
+    speedLines.classList.remove('visible');
+  }
+}
+
+// ── Animation loop ──────────────────────────────────────────────────────────
+function tick(timestamp) {
+  if (!running || frozen) return;
+  if (!lastTimestamp) lastTimestamp = timestamp;
+  const dt = (timestamp - lastTimestamp) / 1000 / SPEED_SCALE;
+  lastTimestamp = timestamp;
+  simTime = Math.min(simTime + dt, T);
+
+  // Record data point
+  const s = calcS(u, a, simTime);
+  currentPoints.push({ t: simTime, s: s });
+
+  updateCar(simTime);
+  updateStats(simTime);
+  updateNarration(simTime);
+  drawGraph();
+
+  if (simTime >= T) {
+    running = false;
+    playBtn.textContent = '▶ Play';
+    narration.textContent = "✅ Done! Distance: " + s.toFixed(1) + " m in " + T.toFixed(1) + " s";
+    return;
+  }
+  animId = requestAnimationFrame(tick);
+}
+
+// ── Play ────────────────────────────────────────────────────────────────────
+playBtn.addEventListener('click', () => {
+  if (running && !frozen) return; // already running
+  if (frozen) {
+    // Unfreeze and continue
+    frozen = false;
+    freezeBadge.classList.remove('show');
+    lastTimestamp = null;
+    running = true;
+    playBtn.textContent = '▶ Playing…';
+    animId = requestAnimationFrame(tick);
+    return;
+  }
+
+  // New run — save ghost from previous
+  if (currentPoints.length > 1) {
+    const lastP = currentPoints[currentPoints.length - 1];
+    ghostData = {
+      points: [...currentPoints],
+      maxS: lastP.s,
+      u: u, a: a, T: lastP.t,
+      finalS: lastP.s,
+      finalV: calcV(ghostData ? ghostData.u : u, ghostData ? ghostData.a : a, lastP.t)
+    };
+    // Recompute ghost finalV properly from its own params
+    ghostData.finalV = calcV(ghostData.u, ghostData.a, ghostData.T);
+  }
+
+  // Reset for new run
+  simTime = 0;
+  currentPoints = [{ t: 0, s: 0 }];
+  lastTimestamp = null;
+  frozen = false;
+  freezeT = null;
+  freezeBadge.classList.remove('show');
+  running = true;
+  playBtn.textContent = '▶ Playing…';
+  sizeCanvas();
+  buildTicks();
+  animId = requestAnimationFrame(tick);
+});
+
+// ── Freeze ──────────────────────────────────────────────────────────────────
+freezeBtn.addEventListener('click', () => {
+  if (!running) return;
+  if (frozen) {
+    // Unfreeze
+    frozen = false;
+    freezeBadge.classList.remove('show');
+    lastTimestamp = null;
+    playBtn.textContent = '▶ Playing…';
+    animId = requestAnimationFrame(tick);
+  } else {
+    frozen = true;
+    freezeT = simTime;
+    freezeBadge.classList.add('show');
+    playBtn.textContent = '▶ Play';
+    cancelAnimationFrame(animId);
+    drawGraph();
+  }
+});
+
+// ── Reset ───────────────────────────────────────────────────────────────────
+resetBtn.addEventListener('click', () => {
+  running = false;
+  frozen = false;
+  freezeT = null;
+  simTime = 0;
+  currentPoints = [];
+  cancelAnimationFrame(animId);
+  lastTimestamp = null;
+  freezeBadge.classList.remove('show');
+  playBtn.textContent = '▶ Play';
+  car.style.left = '20px';
+  car.classList.remove('wobble');
+  speedLines.classList.remove('visible');
+  narration.textContent = 'Adjust the sliders and press Play!';
+  updateStats(0);
+  sizeCanvas();
+  drawGraph();
+});
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+function getCSS(prop) {
+  return getComputedStyle(document.documentElement).getPropertyValue(prop).trim();
+}
+
+// ── Init ────────────────────────────────────────────────────────────────────
+syncSliders();
+sizeCanvas();
+buildTicks();
+updateStats(0);
+drawGraph();
+</script>
+</body>
+</html>

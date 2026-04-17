@@ -133,6 +133,16 @@
                     "hint": "a = (v − u) ÷ t = (40 − 10) ÷ 6",
                     "explanation": "a = (40 − 10) ÷ 6 = 30 ÷ 6 = 5 m/s²"
                   }
+                },
+                {
+                  "id": "b5",
+                  "type": "interactive",
+                  "data": {
+                    "widgetKey": "speed_velocity_graph",
+                    "config": {
+                      "label": "Graph the relationship between distance, velocity & time"
+                    }
+                  }
                 }
               ]
             }

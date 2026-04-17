@@ -6,8 +6,8 @@ import '../../core/constants/routes.dart';
 import '../../data/local/providers.dart';
 import '../../data/local/content_repository.dart';
 import '../../core/models/content_models.dart';
-import '../../shared/widgets/star_row.dart';
 
+// ─────────────────────────────────────────────────────────────────────────────
 class SubjectsScreen extends ConsumerStatefulWidget {
   const SubjectsScreen({super.key});
 
@@ -15,8 +15,7 @@ class SubjectsScreen extends ConsumerStatefulWidget {
   ConsumerState<SubjectsScreen> createState() => _SubjectsScreenState();
 }
 
-class _SubjectsScreenState extends ConsumerState<SubjectsScreen>
-    with SingleTickerProviderStateMixin {
+class _SubjectsScreenState extends ConsumerState<SubjectsScreen> {
   int _selectedSubjectIndex = 0;
 
   @override
@@ -29,6 +28,8 @@ class _SubjectsScreenState extends ConsumerState<SubjectsScreen>
       appBar: AppBar(
         title: const Text('Subjects'),
         titleTextStyle: AppTextStyles.headline2,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: contentLoaded.when(
         data: (_) {
@@ -38,6 +39,7 @@ class _SubjectsScreenState extends ConsumerState<SubjectsScreen>
           }
 
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ── Subject tabs ──
               SizedBox(
@@ -49,17 +51,16 @@ class _SubjectsScreenState extends ConsumerState<SubjectsScreen>
                   itemBuilder: (ctx, i) {
                     final selected = i == _selectedSubjectIndex;
                     return GestureDetector(
-                      onTap: () =>
-                          setState(() => _selectedSubjectIndex = i),
+                      onTap: () => setState(() => _selectedSubjectIndex = i),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
-                        margin: const EdgeInsets.only(right: 10, top: 8, bottom: 8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 0),
+                        margin: const EdgeInsets.only(
+                            right: 10, top: 8, bottom: 8),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 18),
                         decoration: BoxDecoration(
-                          gradient: selected
-                              ? AppColors.buttonGradient
-                              : null,
+                          gradient:
+                              selected ? AppColors.buttonGradient : null,
                           color: selected
                               ? null
                               : (isDark
@@ -92,10 +93,13 @@ class _SubjectsScreenState extends ConsumerState<SubjectsScreen>
                 ),
               ),
 
-              // ── Module / chapter list ──
+              const SizedBox(height: 12),
+
+              // ── Module cards (vertical) ──
               Expanded(
-                child: _ModuleList(
+                child: _ModuleVerticalList(
                   subject: subjects[_selectedSubjectIndex],
+                  isDark: isDark,
                 ),
               ),
             ],
@@ -109,248 +113,292 @@ class _SubjectsScreenState extends ConsumerState<SubjectsScreen>
   }
 }
 
-class _ModuleList extends ConsumerWidget {
+// ─────────────────────────────────────────────────────────────────────────────
+// Vertical module cards
+// ─────────────────────────────────────────────────────────────────────────────
+class _ModuleVerticalList extends ConsumerWidget {
   final Subject subject;
-  const _ModuleList({required this.subject});
+  final bool isDark;
+  const _ModuleVerticalList(
+      {required this.subject, required this.isDark});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final modules = ContentRepository.instance.modulesForSubject(subject.id);
+    final modules =
+        ContentRepository.instance.modulesForSubject(subject.id);
     final progress = ref.watch(progressProvider);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-      itemCount: modules.length,
-      itemBuilder: (ctx, i) => _ModuleCard(
-        module: modules[i],
-        progress: progress,
-        isDark: isDark,
-        isFirst: i == 0,
-      ),
-    );
-  }
-}
-
-class _ModuleCard extends StatefulWidget {
-  final Module module;
-  final UserProgress progress;
-  final bool isDark;
-  final bool isFirst;
-  const _ModuleCard({
-    required this.module,
-    required this.progress,
-    required this.isDark,
-    required this.isFirst,
-  });
-
-  @override
-  State<_ModuleCard> createState() => _ModuleCardState();
-}
-
-class _ModuleCardState extends State<_ModuleCard> {
-  bool _expanded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _expanded = widget.isFirst; // expand first module by default
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final mp = widget.progress.moduleProgress[widget.module.id];
-    final chapters =
-        ContentRepository.instance.chaptersForModule(widget.module.id);
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: widget.isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: widget.isDark ? AppColors.darkBorder : AppColors.lightBorder,
-          width: 0.5,
-        ),
-      ),
-      child: Column(
-        children: [
-          // ── Module header ──
-          GestureDetector(
-            onTap: () => setState(() => _expanded = !_expanded),
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Row(
-                children: [
-                  // Module number badge
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      gradient: AppColors.buttonGradient,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'M${widget.module.order + 1}',
-                      style: AppTextStyles.labelSmall
-                          .copyWith(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.module.title,
-                          style: AppTextStyles.headline3.copyWith(
-                            color: widget.isDark
-                                ? AppColors.darkTextPrimary
-                                : AppColors.lightTextPrimary,
-                          ),
-                        ),
-                        Text(
-                          '${chapters.length} chapters',
-                          style: AppTextStyles.bodySmall.copyWith(
-                            color: widget.isDark
-                                ? AppColors.darkTextSecondary
-                                : AppColors.lightTextSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Stars & expand icon
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      StarRow(
-                        earned: mp?.starsEarned ?? 0,
-                        total: 10,
-                        size: 12,
-                      ),
-                      const SizedBox(height: 4),
-                      Icon(
-                        _expanded
-                            ? Icons.keyboard_arrow_up_rounded
-                            : Icons.keyboard_arrow_down_rounded,
-                        size: 18,
-                        color: widget.isDark
-                            ? AppColors.darkTextTertiary
-                            : AppColors.lightTextTertiary,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // ── Chapters ──
-          if (_expanded)
-            ...chapters.map((ch) => _ChapterRow(
-                  chapter: ch,
-                  progress: widget.progress,
-                  isDark: widget.isDark,
-                )),
-        ],
-      ),
-    );
-  }
-}
-
-class _ChapterRow extends StatelessWidget {
-  final Chapter chapter;
-  final UserProgress progress;
-  final bool isDark;
-  const _ChapterRow({
-    required this.chapter,
-    required this.progress,
-    required this.isDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final cp = progress.chapterProgress[chapter.id];
-    final isCompleted = cp?.isCompleted ?? false;
-    final isInProgress =
-        !isCompleted && (cp?.completedLessons ?? 0) > 0;
-
-    Color statusColor;
-    IconData statusIcon;
-    if (isCompleted) {
-      statusColor = AppColors.success;
-      statusIcon = Icons.check_rounded;
-    } else if (isInProgress) {
-      statusColor = AppColors.buttonPurpleStart;
-      statusIcon = Icons.play_arrow_rounded;
-    } else {
-      statusColor =
-          isDark ? AppColors.darkBorder : AppColors.lightBorder;
-      statusIcon = Icons.lock_outline_rounded;
+    if (modules.isEmpty) {
+      return const Center(child: Text('No modules yet'));
     }
 
+    // Card geometry
+    const double cardH = 160.0;
+
+    // Gradient rail lines
+    const railGradient = LinearGradient(
+      colors: [Color(0xFF000000), AppColors.cardGoldStart, Color(0xFF000000)],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    );
+
+    return Stack(
+      children: [
+        // ── Vertical rail line ──
+        Positioned(
+          top: 0,
+          bottom: 0,
+          left: 30,
+          child: Container(
+            width: 6,
+            decoration: const BoxDecoration(gradient: railGradient),
+          ),
+        ),
+
+        // ── Module list ──
+        ListView.builder(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 40),
+          itemCount: modules.length,
+          itemBuilder: (ctx, i) {
+            final module = modules[i];
+            final mp = progress.moduleProgress[module.id];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 24.0, left: 30),
+              child: _ModuleCard(
+                module: module,
+                moduleProgress: mp,
+                cardH: cardH,
+                index: i,
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Single module card
+// ─────────────────────────────────────────────────────────────────────────────
+class _ModuleCard extends StatelessWidget {
+  final Module module;
+  final ModuleProgress? moduleProgress;
+  final double cardH;
+  final int index;
+
+  const _ModuleCard({
+    required this.module,
+    required this.moduleProgress,
+    required this.cardH,
+    required this.index,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(
         context,
-        AppRoutes.chapter,
-        arguments: {
-          'moduleId': chapter.moduleId,
-          'chapterId': chapter.id,
-        },
+        AppRoutes.moduleChapters,
+        arguments: {'moduleId': module.id},
       ),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-              width: 0.5,
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.15),
-                shape: BoxShape.circle,
-                border: Border.all(color: statusColor, width: 1),
+      child: SizedBox(
+        width: double.infinity,
+        height: cardH,
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          elevation: 8,
+          shadowColor: AppColors.buttonPurpleStart.withOpacity(0.4),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // ── Golden gradient base ──
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.cardGoldStart, AppColors.cardOrangeEnd],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
               ),
-              child: Icon(statusIcon, size: 12, color: statusColor),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    chapter.title,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: isDark
-                          ? AppColors.darkTextPrimary
-                          : AppColors.lightTextPrimary,
+
+              // ── module_bg decorative image (right) ──
+              Positioned(
+                top: 0,
+                right: -20,
+                bottom: 0,
+                child: Image.asset(
+                  'assets/img/module_bg.png',
+                  opacity: const AlwaysStoppedAnimation(0.45),
+                  fit: BoxFit.fitHeight,
+                  errorBuilder: (_, __, ___) => const SizedBox(),
+                ),
+              ),
+
+              // ── Radial lines decorative (left) ──
+              Positioned(
+                top: 0,
+                left: -18,
+                child: Image.asset(
+                  'assets/img/radial-lines.png',
+                  height: cardH,
+                  color: Colors.white.withOpacity(0.3),
+                  errorBuilder: (_, __, ___) => const SizedBox(),
+                ),
+              ),
+
+              // ── Purple overlay stripe on left ──
+              Positioned(
+                left: 0,
+                top: 0,
+                bottom: 0,
+                child: Container(
+                  width: 0,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.buttonDeepVioletEnd.withOpacity(0.88),
+                        AppColors.buttonPurpleStart.withOpacity(0.0),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
                     ),
                   ),
-                  if (isInProgress)
+                ),
+              ),
+
+              // ── Music line decorative ──
+              Positioned(
+                right: 50,
+                top: 0,
+                bottom: 0,
+                child: Image.asset(
+                  'assets/img/music_line.png',
+                  height: 0,
+                  width: 150,
+                  opacity: const AlwaysStoppedAnimation(0.5),
+                  errorBuilder: (_, __, ___) => const SizedBox(),
+                ),
+              ),
+
+              // ── Text content ──
+              Positioned(
+                top: 18,
+                left: 16,
+                right: 12,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      '${cp?.completedLessons} / ${cp?.totalLessons} lessons',
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: AppColors.buttonPurpleStart,
+                      'MODULE ${module.order + 1}',
+                      style: AppTextStyles.overline.copyWith(
+                        color: AppColors.cardGoldStart,
+                        letterSpacing: 1.5,
                       ),
                     ),
-                ],
+                    const SizedBox(height: 4),
+                    Text(
+                      module.title,
+                      style: AppTextStyles.headline3.copyWith(
+                        color: Colors.white,
+                        fontSize: 15,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black.withOpacity(0.6),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            StarRow(
-              earned: cp?.starsEarned ?? 0,
-              total: 5,
-              size: 12,
-            ),
-          ],
+
+              // ── Chapters count badge (bottom left) ──
+              Positioned(
+                bottom: 12,
+                left: 16,
+                child: _ChaptersBadge(module: module),
+              ),
+
+              // ── Stars badge (bottom right) ──
+              if (moduleProgress != null)
+                Positioned(
+                  bottom: 12,
+                  right: 12,
+                  child: _StarsBadge(
+                    earned: moduleProgress!.starsEarned,
+                    total: 10,
+                  ),
+                ),
+
+              // ── Arrow ──
+              const Positioned(
+                top: 0,
+                bottom: 0,
+                right: 14,
+                child: Center(
+                  child: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 14,
+                    color: Colors.white54,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ChaptersBadge extends StatelessWidget {
+  final Module module;
+  const _ChaptersBadge({required this.module});
+
+  @override
+  Widget build(BuildContext context) {
+    final chapters =
+        ContentRepository.instance.chaptersForModule(module.id);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.35),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.white24, width: 0.5),
+      ),
+      child: Text(
+        '${chapters.length} chapters',
+        style:
+            AppTextStyles.labelSmall.copyWith(color: Colors.white70, fontSize: 10),
+      ),
+    );
+  }
+}
+
+class _StarsBadge extends StatelessWidget {
+  final int earned;
+  final int total;
+  const _StarsBadge({required this.earned, required this.total});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(
+        total > 5 ? 5 : total,
+        (i) => Icon(
+          i < (earned * 5 / total).round()
+              ? Icons.star_rounded
+              : Icons.star_border_rounded,
+          size: 12,
+          color: AppColors.starGold,
         ),
       ),
     );

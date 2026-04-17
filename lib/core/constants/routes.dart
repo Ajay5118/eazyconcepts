@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../features/auth/splash_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/subjects/subjects_screen.dart';
+import '../../features/subjects/module_chapters_screen.dart';
 import '../../features/subjects/chapter_screen.dart';
 import '../../features/lesson/lesson_screen.dart';
 import '../../features/lesson/lesson_complete_screen.dart';
@@ -13,6 +14,7 @@ class AppRoutes {
   static const String shell = '/shell';
   static const String home = '/home';
   static const String subjects = '/subjects';
+  static const String moduleChapters = '/module-chapters';
   static const String chapter = '/chapter';
   static const String lesson = '/lesson';
   static const String lessonComplete = '/lesson/complete';
@@ -27,6 +29,13 @@ class AppRouter {
 
       case AppRoutes.shell:
         return _fade(const MainShell(), settings);
+
+      case AppRoutes.moduleChapters:
+        final args = settings.arguments as Map<String, String>;
+        return _slide(
+          ModuleChaptersScreen(moduleId: args['moduleId']!),
+          settings,
+        );
 
       case AppRoutes.chapter:
         final args = settings.arguments as Map<String, String>;

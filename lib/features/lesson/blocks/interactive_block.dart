@@ -39,6 +39,8 @@ class InteractiveRegistry {
         CrossSectionExplorerWidget(config: config, isDark: isDark),
     'volume_stacker': (config, isDark) =>
         VolumeStackerWidget(config: config, isDark: isDark),
+    'speed_velocity_graph': (config, isDark) =>
+        MotionGraphsWidget(config: config, isDark: isDark),
   };
 
   static Widget build(String key, Map<String, dynamic> config, bool isDark) {
@@ -149,12 +151,17 @@ class _DraggableGraphWidgetState extends State<DraggableGraphWidget> {
                     style: AppTextStyles.overline.copyWith(color: Colors.white)),
               ),
               const SizedBox(width: 10),
-              Text(label,
+              Flexible(
+                child: Text(
+                  label,
                   style: AppTextStyles.bodySmall.copyWith(
                     color: widget.isDark
                         ? AppColors.darkTextSecondary
                         : AppColors.lightTextSecondary,
-                  )),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 14),
@@ -396,12 +403,17 @@ class _NumberLineWidgetState extends State<NumberLineWidget> {
                     style: AppTextStyles.overline.copyWith(color: Colors.white)),
               ),
               const SizedBox(width: 10),
-              Text(label,
+              Flexible(
+                child: Text(
+                  label,
                   style: AppTextStyles.bodySmall.copyWith(
                     color: widget.isDark
                         ? AppColors.darkTextSecondary
                         : AppColors.lightTextSecondary,
-                  )),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -2807,5 +2819,542 @@ class _UnknownWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INTERACTIVE WIDGET 13: Motion Graphs (Distance-Time & Velocity-Time)
+// ─────────────────────────────────────────────────────────────────────────────
+
+class MotionGraphsWidget extends StatefulWidget {
+  final Map<String, dynamic> config;
+  final bool isDark;
+  const MotionGraphsWidget(
+      {super.key, required this.config, required this.isDark});
+
+  @override
+  State<MotionGraphsWidget> createState() => _MotionGraphsWidgetState();
+}
+
+class _MotionGraphsWidgetState extends State<MotionGraphsWidget> with SingleTickerProviderStateMixin {
+  int _selectedMode = 0;
+
+  double _constantV = 10;
+
+  double _u = 0;
+  double _a = 2;
+
+  late AnimationController _animController;
+  final double _tMax = 10.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
+  }
+
+  void _togglePlay() {
+    if (_animController.isAnimating) {
+      _animController.stop();
+    } else if (_animController.value == 1.0) {
+      _animController.forward(from: 0);
+    } else {
+      _animController.forward();
+    }
+    setState(() {});
+  }
+
+  Widget _buildTabButton(String text, int index) {
+    final isSelected = _selectedMode == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedMode = index;
+            _animController.value = 0;
+            _animController.stop();
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.buttonPurpleStart
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isSelected
+                  ? Colors.transparent
+                  : (widget.isDark ? AppColors.darkBorder : AppColors.lightBorder),
+            ),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            text,
+            style: AppTextStyles.labelSmall.copyWith(
+              color: isSelected
+                  ? Colors.white
+                  : (widget.isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary),
+              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSimulationTrack() {
+    return AnimatedBuilder(
+      animation: _animController,
+      builder: (context, child) {
+        final t = _animController.value * _tMax;
+        double distance = 0;
+        
+        if (_selectedMode == 0) {
+          double dMax = 200.0;
+          double rawD = _constantV * t;
+          distance = (rawD / dMax).clamp(-1.0, 1.0);
+        } else {
+          double dMax = 450.0;
+          double rawD = _u * t + 0.5 * _a * t * t;
+          distance = (rawD / dMax).clamp(-1.5, 1.5);
+        }
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            double availableWidth = constraints.maxWidth - 100;
+            double leftPos = 60 + (distance * availableWidth);
+            
+            bool isGoingBackwards = false;
+            if (_selectedMode == 0 && _constantV < 0) isGoingBackwards = true;
+            if (_selectedMode == 1) {
+              double currentV = _u + _a * t;
+              if (currentV < 0) isGoingBackwards = true;
+            }
+
+            return Container(
+              height: 64,
+              decoration: BoxDecoration(
+                color: widget.isDark ? AppColors.darkSurface2 : AppColors.lightSurface2,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: widget.isDark ? AppColors.darkBorder : AppColors.lightBorder),
+              ),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                   Positioned(
+                     left: 0, right: 0, top: 31,
+                     child: Container(height: 2, color: widget.isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                   ),
+                   Positioned(
+                     left: 60, top: 15, bottom: 15,
+                     child: Container(
+                       width: 4, 
+                       decoration: BoxDecoration(
+                         color: AppColors.success,
+                         borderRadius: BorderRadius.circular(2)
+                       ),
+                     ),
+                   ),
+                   Positioned(
+                     left: leftPos.clamp(10, constraints.maxWidth - 40),
+                     child: Transform(
+                       alignment: Alignment.center,
+                       transform: Matrix4.rotationY(isGoingBackwards ? 3.14159 : 0),
+                       child: Icon(
+                         _selectedMode == 0 ? Icons.directions_car_rounded : Icons.rocket_launch_rounded,
+                         color: AppColors.cardGoldStart,
+                         size: 32,
+                       ),
+                     ),
+                   ),
+                   Positioned(
+                     right: 8, top: 8, bottom: 8,
+                     child: GestureDetector(
+                       onTap: _togglePlay,
+                       child: Container(
+                         width: 48,
+                         decoration: BoxDecoration(
+                           color: AppColors.buttonPurpleStart.withOpacity(0.15),
+                           borderRadius: BorderRadius.circular(8),
+                         ),
+                         child: Icon(
+                           _animController.isAnimating ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                           color: AppColors.buttonPurpleStart,
+                         ),
+                       ),
+                     ),
+                   ),
+                ],
+              ),
+            );
+          }
+        );
+      }
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor = widget.isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary;
+    final subColor = widget.isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary;
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  gradient: AppColors.buttonGradient,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text('Simulation',
+                    style: AppTextStyles.overline.copyWith(color: Colors.white)),
+              ),
+              const SizedBox(width: 10),
+              Flexible(
+                child: Text(
+                  widget.config['label'] as String? ?? 'Motion Simulator',
+                  style: AppTextStyles.bodySmall.copyWith(color: subColor),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          
+          Row(
+            children: [
+              _buildTabButton('Distance-Time', 0),
+              const SizedBox(width: 8),
+              _buildTabButton('Velocity-Time', 1),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          _buildSimulationTrack(),
+          const SizedBox(height: 16),
+
+          Container(
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: widget.isDark ? AppColors.darkSurface2 : AppColors.lightSurface2,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: widget.isDark ? AppColors.darkBorder : AppColors.lightBorder),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: AnimatedBuilder(
+                animation: _animController,
+                builder: (context, child) {
+                  return CustomPaint(
+                    painter: _MotionGraphPainter(
+                      mode: _selectedMode,
+                      v: _constantV,
+                      u: _u,
+                      a: _a,
+                      currentT: _animController.value * _tMax,
+                      isDark: widget.isDark,
+                    ),
+                  );
+                }
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          if (_selectedMode == 0) ...[
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.buttonDeepVioletEnd.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: AnimatedBuilder(
+                animation: _animController,
+                builder: (context, child) {
+                  double t = _animController.value * _tMax;
+                  double d = _constantV * t;
+                  return Text(
+                    'd = v × t \n d =  ×  =  m',
+                    style: AppTextStyles.lessonEquation.copyWith(
+                      color: AppColors.buttonPurpleStart,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                  );
+                }
+              ),
+            ),
+            const SizedBox(height: 16),
+            _MotionSlider(
+              label: 'Velocity (m/s)',
+              value: _constantV,
+              min: -20,
+              max: 20,
+              color: AppColors.buttonPurpleStart,
+              onChanged: (val) {
+                setState(() { _constantV = val; _animController.value = 0; _animController.stop(); });
+              },
+              isDark: widget.isDark,
+            ),
+          ] else ...[
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.buttonDeepVioletEnd.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: AnimatedBuilder(
+                animation: _animController,
+                builder: (context, child) {
+                  double t = _animController.value * _tMax;
+                  double finalV = _u + _a * t;
+                  return Text(
+                    'v = u + at \n v =  + () =  m/s',
+                    style: AppTextStyles.lessonEquation.copyWith(
+                      color: AppColors.buttonPurpleStart,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                  );
+                }
+              ),
+            ),
+            const SizedBox(height: 16),
+            _MotionSlider(
+              label: 'Init Velocity (m/s)',
+              value: _u,
+              min: -20,
+              max: 20,
+              color: AppColors.buttonPurpleStart,
+              onChanged: (val) {
+                setState(() { _u = val; _animController.value = 0; _animController.stop(); });
+              },
+              isDark: widget.isDark,
+            ),
+            const SizedBox(height: 8),
+            _MotionSlider(
+              label: 'Acceleration (m/s²)',
+              value: _a,
+              min: -5,
+              max: 5,
+              color: AppColors.cardOrangeEnd,
+              onChanged: (val) {
+                 setState(() { _a = val; _animController.value = 0; _animController.stop(); });
+              },
+              isDark: widget.isDark,
+            ),
+          ]
+        ],
+      ),
+    );
+  }
+}
+
+class _MotionSlider extends StatelessWidget {
+  final String label;
+  final double value;
+  final double min;
+  final double max;
+  final Color color;
+  final ValueChanged<double> onChanged;
+  final bool isDark;
+
+  const _MotionSlider({
+    required this.label,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.color,
+    required this.onChanged,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 130,
+          child: Text(
+            label,
+            style: AppTextStyles.labelSmall.copyWith(
+              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+            ),
+          ),
+        ),
+        Expanded(
+          child: SliderTheme(
+            data: SliderThemeData(
+              activeTrackColor: color,
+              inactiveTrackColor: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+              thumbColor: color,
+              overlayColor: color.withOpacity(0.2),
+              trackHeight: 3,
+            ),
+            child: Slider(
+              value: value,
+              min: min,
+              max: max,
+              onChanged: onChanged,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 35,
+          child: Text(
+            value.toStringAsFixed(1),
+            style: AppTextStyles.labelSmall.copyWith(
+              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+            ),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MotionGraphPainter extends CustomPainter {
+  final int mode;
+  final double v;
+  final double u;
+  final double a;
+  final double currentT;
+  final bool isDark;
+
+  _MotionGraphPainter({
+    required this.mode,
+    required this.v,
+    required this.u,
+    required this.a,
+    required this.currentT,
+    required this.isDark,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final axisPaint = Paint()
+      ..color = isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary
+      ..strokeWidth = 1.5;
+
+    final gridPaint = Paint()
+      ..color = isDark ? AppColors.darkBorder : AppColors.lightBorder
+      ..strokeWidth = 0.5;
+
+    final linePaint = Paint()
+      ..color = AppColors.buttonPurpleStart
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
+
+    final double tMax = 10.0;
+    
+    final int gridLines = 5;
+    for (int i = 0; i <= gridLines * 2; i++) {
+        double yPos = size.height * (i / (gridLines * 2));
+        canvas.drawLine(Offset(0, yPos), Offset(size.width, yPos), gridPaint);
+    }
+    for (int i = 0; i <= gridLines * 2; i++) {
+        double xPos = size.width * (i / (gridLines * 2));
+        canvas.drawLine(Offset(xPos, 0), Offset(xPos, size.height), gridPaint);
+    }
+
+    final origin = Offset(0, size.height / 2);
+    canvas.drawLine(Offset(0, origin.dy), Offset(size.width, origin.dy), axisPaint);
+    canvas.drawLine(Offset(0, 0), Offset(0, size.height), axisPaint);
+
+    Path path = Path();
+    bool firstPoint = true;
+    
+    // Track dot position
+    Offset dotPos = origin;
+
+    for (double t = 0; t <= tMax; t += 0.1) {
+      double yVal = 0;
+      double xCoord = (t / tMax) * size.width;
+      
+      if (mode == 0) {
+        double dMax = 200.0;
+        double d = v * t;
+        yVal = origin.dy - (d / dMax) * (size.height / 2);
+      } else {
+        double vMax = 50.0;
+        double currentV = u + a * t;
+        yVal = origin.dy - (currentV / vMax) * (size.height / 2);
+      }
+
+      if (t <= currentT + 0.05 && t >= currentT - 0.05) {
+        dotPos = Offset(xCoord, yVal);
+      }
+
+      if (firstPoint) {
+        path.moveTo(xCoord, yVal);
+        firstPoint = false;
+      } else {
+        path.lineTo(xCoord, yVal);
+      }
+    }
+    
+    if (mode == 1) {
+      Path areaPath = Path();
+      bool firstArea = true;
+      for (double t = 0; t <= currentT; t += 0.1) {
+          double xCoord = (t / tMax) * size.width;
+          double vMax = 50.0;
+          double currentV = u + a * t;
+          double yVal = origin.dy - (currentV / vMax) * (size.height / 2);
+          
+          if(firstArea){
+              areaPath.moveTo(xCoord, origin.dy);
+              areaPath.lineTo(xCoord, yVal);
+              firstArea = false;
+          }else{
+              areaPath.lineTo(xCoord, yVal);
+          }
+      }
+      if(currentT > 0){
+          double xEnd = (currentT / tMax) * size.width;
+          areaPath.lineTo(xEnd, origin.dy);
+          areaPath.close();
+
+          canvas.drawPath(
+            areaPath,
+            Paint()
+              ..color = AppColors.buttonPurpleStart.withOpacity(0.15)
+              ..style = PaintingStyle.fill,
+          );
+      }
+    }
+
+    canvas.drawPath(path, linePaint);
+    
+    // Draw Current Position Dot
+    canvas.drawCircle(
+      dotPos, 
+      6, 
+      Paint()..color = AppColors.cardOrangeEnd
+    );
+  }
+
+  @override
+  bool shouldRepaint(_MotionGraphPainter old) {
+    return old.mode != mode || old.v != v || old.u != u || old.a != a || old.currentT != currentT;
   }
 }
